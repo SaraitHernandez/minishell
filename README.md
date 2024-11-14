@@ -36,7 +36,10 @@ Welcome to **Minishell**, a simplified version of the Unix shell, built as a pro
 ### Requirements
 
 - GCC compiler
-- GNU Readline library
+- GNU Readline library - For Debian/Ubuntu-based Systems 
+  ```bash 
+  sudo apt-get install libreadline-dev
+  ```
 - Make
 
 ### Steps
