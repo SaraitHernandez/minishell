@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_errors.c                                     :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:35:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 12:03:23 by sarherna         ###   ########.fr       */
+/*   Created: 2024/02/28 18:38:32 by sarherna          #+#    #+#             */
+/*   Updated: 2024/11/16 15:21:25 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	display_error(char *message)
+size_t	ft_strlen(const char *s)
 {
-	if (message)
-		fprintf(stderr, "%s\n", message);
-}
+	size_t	length;
 
-void	exit_with_error(char *message, int exit_code)
-{
-	if (message)
-		fprintf(stderr, "%s\n", message);
-	exit(exit_code);
-}
-
-void	comand_not_found(char *cmd_name)
-{
-	if (cmd_name)
-		fprintf(stderr, "command not found:  %s\n", cmd_name);
+	length = 0;
+	while (*s != '\0')
+	{
+		length++;
+		s++;
+	}
+	return (length);
 }

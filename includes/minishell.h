@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/14 20:11:35 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 19:01:29 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft.h"
 
 /* Constants */
 # define TRUE 1
@@ -93,8 +94,8 @@ int		main(int argc, char **argv, char **envp);
 void	shell_loop(void);
 
 /* init_shell.c */
-void	init_shell_env(char **envp);
-void	set_shell_level(void);
+void	init_shell_env(char **envp, t_env **env_list);
+void	set_shell_level(t_env **env);
 void	init_signal_handlers(void);
 
 /* input.c */
@@ -183,13 +184,18 @@ int		builtin_exit(char **argv);
 /* environment/environment.c */
 t_env	*copy_environment(char **envp);
 char	*get_env_value(char *key, t_env *env);
-void	set_env_value(char *key, char *value, t_env *env);
+void	set_env_value(char *key, char *value, t_env **env);
 void	unset_env_value(char *key, t_env *env);
+
+/* environment/environment_variables.c */
+void	ensure_path_variable(t_env *env);
 
 /* environment/environment_utils.c */
 t_env	*create_env_node(char *key, char *value);
 void	free_env_list(t_env *env);
 char	**env_list_to_array(t_env *env);
+void	add_env_node(t_env **env_list, t_env *new_node);
+t_env	*parse_env_var(char *env_var);
 
 /* utils/utils_strings.c */
 char	*ft_strdup(const char *s1);
@@ -206,11 +212,5 @@ void	free_string_array(char **array);
 void	display_error(char *message);
 void	exit_with_error(char *message, int exit_code);
 void	command_not_found(char *cmd_name);
-
-/* Other Utility Functions */
-int		ft_strcmp(const char *s1, const char *s2);
-int		ft_isdigit(int c);
-int		ft_atoi(const char *str);
-char	*ft_itoa(int n);
 
 #endif

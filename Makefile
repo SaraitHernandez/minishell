@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/14 11:39:18 by sarherna         ###   ########.fr        #
+#    Updated: 2024/11/16 16:39:18 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS := \
 	$(BUILTINS_DIR)/builtin_exit.c \
 	$(ENV_DIR)/environment.c \
 	$(ENV_DIR)/environment_utils.c \
+	$(ENV_DIR)/enviroment_variables.c \
 	$(UTILS_DIR)/utils_strings.c \
 	$(UTILS_DIR)/utils_memory.c \
 	$(UTILS_DIR)/utils_errors.c

@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_errors.c                                     :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:35:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 12:03:23 by sarherna         ###   ########.fr       */
+/*   Created: 2024/02/29 16:48:26 by sarherna          #+#    #+#             */
+/*   Updated: 2024/11/16 17:48:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef LIBFT_H
+# define LIBFT_H
+# include <stddef.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-void	display_error(char *message)
-{
-	if (message)
-		fprintf(stderr, "%s\n", message);
-}
-
-void	exit_with_error(char *message, int exit_code)
-{
-	if (message)
-		fprintf(stderr, "%s\n", message);
-	exit(exit_code);
-}
-
-void	comand_not_found(char *cmd_name)
-{
-	if (cmd_name)
-		fprintf(stderr, "command not found:  %s\n", cmd_name);
-}
+size_t	ft_strlen(const char *str);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strdup(const char *s1);
+char	*ft_strchr(const char *s, int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+int		ft_atoi(const char *str);
+char	*ft_itoa(int n);
+#endif

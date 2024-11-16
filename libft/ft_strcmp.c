@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_errors.c                                     :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:35:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 12:03:23 by sarherna         ###   ########.fr       */
+/*   Created: 2024/03/18 17:49:20 by sarherna          #+#    #+#             */
+/*   Updated: 2024/11/16 15:21:01 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	display_error(char *message)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (message)
-		fprintf(stderr, "%s\n", message);
-}
+	size_t	i;
 
-void	exit_with_error(char *message, int exit_code)
-{
-	if (message)
-		fprintf(stderr, "%s\n", message);
-	exit(exit_code);
-}
-
-void	comand_not_found(char *cmd_name)
-{
-	if (cmd_name)
-		fprintf(stderr, "command not found:  %s\n", cmd_name);
+	i = 0;
+	while ((s1[i] || s2[i]))
+	{
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
 }

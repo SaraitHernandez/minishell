@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_errors.c                                     :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:35:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 12:03:23 by sarherna         ###   ########.fr       */
+/*   Created: 2024/03/18 20:11:17 by sarherna          #+#    #+#             */
+/*   Updated: 2024/11/16 15:21:26 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	display_error(char *message)
+char	*ft_strdup(const char *s)
 {
-	if (message)
-		fprintf(stderr, "%s\n", message);
-}
+	char	*copy;
+	size_t	i;
 
-void	exit_with_error(char *message, int exit_code)
-{
-	if (message)
-		fprintf(stderr, "%s\n", message);
-	exit(exit_code);
-}
-
-void	comand_not_found(char *cmd_name)
-{
-	if (cmd_name)
-		fprintf(stderr, "command not found:  %s\n", cmd_name);
+	copy = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (copy == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		copy[i] = s[i];
+		i++;
+	}
+	copy[i] = '\0';
+	return (copy);
 }

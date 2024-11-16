@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 19:24:52 by sarherna         ###   ########.fr       */
+/*   Created: 2024/03/18 17:02:05 by sarherna          #+#    #+#             */
+/*   Updated: 2024/05/17 09:45:28 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strchr(const char *s, int c)
 {
-	t_env	*env_list;
-
-	(void)argc;
-	(void)argv;
-	//init_signal_handlers();
-	init_shell_env(envp, &env_list);
-	//shell_loop(env_list);
-	free_env_list(env_list);
-	return (0);
+	while (*s != '\0')
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((char)c == '\0')
+		return ((char *)s);
+	return (NULL);
 }
