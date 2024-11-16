@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 10:37:19 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 17:47:14 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:55:17 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ char	*get_env_value(char *key, t_env *env)
 	return (NULL);
 }
 
-void	set_env_value(char *key, char *value, t_env *env)
+void	set_env_value(char *key, char *value, t_env **env)
 {
 	t_env	*current;
 	t_env	*new_node;
 
-	current = env;
+	current = *env;
 	while (current)
 	{
 		if (ft_strcmp(current->key, key) == 0)
@@ -57,7 +57,7 @@ void	set_env_value(char *key, char *value, t_env *env)
 		current = current->next;
 	}
 	new_node = create_env_node(key, value);
-	add_env_node(&env, new_node);
+	add_env_node(env, new_node);
 }
 
 void	unset_env_value(char *key, t_env *env)
