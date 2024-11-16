@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   enviroment_paths.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 17:21:46 by sarherna         ###   ########.fr       */
+/*   Created: 2024/11/16 16:34:55 by sarherna          #+#    #+#             */
+/*   Updated: 2024/11/16 16:36:25 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	path_variable(t_env *env)
 {
-	t_env	*env_list;
-
-	(void)argc;
-	(void)argv;
-	init_signal_handlers();
-	init_shell_env(envp, &env_list);
-	//shell_loop(env_list);
-	free_env_list(env_list);
-	return (0);
+	if (!get_env_value("PATH", env))
+		set_env_value("PATH", "/usr/bin:/bin", env);
 }
