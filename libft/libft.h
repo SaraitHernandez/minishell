@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 16:48:26 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 15:52:36 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:48:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
-
 
 size_t	ft_strlen(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:27:17 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 15:59:44 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:48:11 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	add_env_node(t_env **env_list, t_env *new_node)
 
 void	free_env_list(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
-    while (env)
+	while (env)
 	{
 		tmp = env;
 		env = env->next;
@@ -56,6 +56,30 @@ void	free_env_list(t_env *env)
 
 char	**env_list_to_array(t_env *env)
 {
-    (void)env;
+	(void)env;
 	return (NULL);
+}
+
+t_env	*parse_env_var(char *env_var)
+{
+	char	*equal_sign;
+	char	*key;
+	char	*value;
+	t_env	*new_node;
+
+	equal_sign = ft_strchr(env_var, '=');
+	if (equal_sign)
+	{
+		key = ft_substr(env_var, 0, equal_sign - env_var);
+		value = ft_strdup(equal_sign + 1);
+	}
+	else
+	{
+		key = ft_strdup(env_var);
+		value = ft_strdup("");
+	}
+	new_node = create_env_node(key, value);
+	free(key);
+	free(value);
+	return (new_node);
 }

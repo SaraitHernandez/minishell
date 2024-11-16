@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 10:37:19 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 17:29:59 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:47:14 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,19 @@
 t_env	*copy_environment(char **envp)
 {
 	t_env	*env_list;
-	t_env	*new_node;
-	char	*key;
-	char	*value;
 	int		i;
+	t_env	*new_node;
 
 	env_list = NULL;
 	i = 0;
 	while (envp[i])
 	{
-		char *equal_sign = ft_strchr(envp[i], '=');
-		if (equal_sign)
-		{
-			key = ft_substr(envp[i], 0, equal_sign - envp[i]);
-			value = ft_strdup(equal_sign + 1);
-		}
-		else
-		{
-			key = ft_strdup(envp[i]);
-			value = ft_strdup("");
-		}
-		new_node = create_env_node(key, value);
+		new_node = parse_env_var(envp[i]);
 		add_env_node(&env_list, new_node);
-		free(key);
-		free(value);
 		i++;
 	}
 	return (env_list);
 }
-
 
 char	*get_env_value(char *key, t_env *env)
 {

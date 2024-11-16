@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 17:21:46 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:42:25 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	init_signal_handlers();
+	//init_signal_handlers();
 	init_shell_env(envp, &env_list);
 	//shell_loop(env_list);
 	free_env_list(env_list);

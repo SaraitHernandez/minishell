@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 17:20:54 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:47:53 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	shell_loop(void);
 
 /* init_shell.c */
 void	init_shell_env(char **envp, t_env **env_list);
-void	set_shell_level(void);
+void	set_shell_level(t_env *env);
 void	init_signal_handlers(void);
 
 /* input.c */
@@ -187,13 +187,14 @@ void	set_env_value(char *key, char *value, t_env *env);
 void	unset_env_value(char *key, t_env *env);
 
 /* environment/environment_variables.c */
-void	path_variable(t_env *env);
+void	ensure_path_variable(t_env *env);
 
 /* environment/environment_utils.c */
 t_env	*create_env_node(char *key, char *value);
 void	free_env_list(t_env *env);
 char	**env_list_to_array(t_env *env);
 void	add_env_node(t_env **env_list, t_env *new_node);
+t_env	*parse_env_var(char *env_var);
 
 /* utils/utils_strings.c */
 char	*ft_strdup(const char *s1);
@@ -216,5 +217,7 @@ int		ft_strcmp(const char *s1, const char *s2);
 int		ft_isdigit(int c);
 int		ft_atoi(const char *str);
 char	*ft_itoa(int n);
+char	*ft_strchr(const char *s, int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif
