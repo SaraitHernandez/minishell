@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 09:33:05 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:53:21 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	shell_loop(t_env *env_list);
 /* init_shell.c */
 void	init_shell_env(char **envp, t_env **env_list);
 void	set_shell_level(t_env **env);
-void	init_signal_handlers(void);
 
 /* input.c */
 char	*read_input(void);
@@ -152,6 +151,7 @@ void	sigint_handler(int signo);
 void	sigquit_handler(int signo);
 void	setup_signal_handlers(void);
 void	heredoc_signal_handler(int signo);
+void	setup_heredoc_signal_handlers(void);
 
 /* cleanup.c */
 void	cleanup_shell(t_env *env, t_ast *ast);
