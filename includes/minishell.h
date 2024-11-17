@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 19:01:29 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/17 09:33:05 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ extern volatile sig_atomic_t	g_signal_received;
 
 /* main.c */
 int		main(int argc, char **argv, char **envp);
-void	shell_loop(void);
+void	shell_loop(t_env *env_list);
 
 /* init_shell.c */
 void	init_shell_env(char **envp, t_env **env_list);
