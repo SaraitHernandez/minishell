@@ -6,13 +6,13 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/01 12:21:24 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/16 15:53:00 by sarherna         ###   ########.fr        #
+#    Updated: 2024/11/17 11:02:41 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 SRCS = 	ft_strlen.c ft_strcmp.c ft_strdup.c ft_substr.c ft_strchr.c \
-		ft_itoa.c ft_atoi.c
+		ft_itoa.c ft_atoi.c ft_memset.c
 OBJS = $(SRCS:.c=.o)
 FLAGS = -Wall -Wextra -Werror
 

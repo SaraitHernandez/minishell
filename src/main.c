@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 10:01:17 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/17 16:56:13 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	shell_loop(t_env *env_list)
 		input = readline("minishell$ ");
 		if (!input)
 		{
-			printf("exit\n");
+			write(STDOUT_FILENO, "exit\n", 5);
 			break ;
 		}
 		add_history(input);
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	//init_signal_handlers();
+	init_signal_handlers();
 	init_shell_env(envp, &env_list);
 	shell_loop(env_list);
 	free_env_list(env_list);
