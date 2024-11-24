@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 19:03:14 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 22:04:45 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	shell_loop(t_env *env_list)
 {
 	char	*input;
+	t_token	*tokens;
+	t_ast	*ast;
 
 	(void)env_list;
 	while (1)
@@ -33,6 +35,12 @@ void	shell_loop(t_env *env_list)
 			free(input);
 			continue ;
 		}
+		tokens = lexer(input);
+		print_tokens(tokens);
+		ast = parse_tokens(tokens);
+		print_ast(ast);
+		free_tokens(tokens);
+		free_ast(ast);
 		free(input);
 	}
 }
