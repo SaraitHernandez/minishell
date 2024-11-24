@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:37:57 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 18:38:18 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:57:17 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_tokens(t_token *tokens)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (tokens)
 	{
@@ -28,7 +28,7 @@ void	free_tokens(t_token *tokens)
 void	free_ast(t_ast *node)
 {
 	if (!node)
-		return;
+		return ;
 	free_ast(node->left);
 	free_ast(node->right);
 	if (node->argv)

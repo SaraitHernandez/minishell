@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:15:42 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 18:56:24 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:54:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,22 @@ t_ast	*create_redirection_node(t_ast *cmd, t_token_type type, char *file)
 	redir->left = cmd;
 	redir->right = NULL;
 	return (redir);
+}
+
+char	**copy_argv(char **argv_local, int argc)
+{
+	char	**argv;
+	int		i;
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
+		exit_with_error("Memory allocation failed for argv");
+	i = 0;
+	while (i < argc)
+	{
+		argv[i] = argv_local[i];
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
 }

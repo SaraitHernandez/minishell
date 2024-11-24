@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 19:42:02 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:55:03 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int		is_redirection(t_token_type type);
 void	syntax_error(char *message);
 t_ast	*create_command_node(char **argv);
 t_ast	*create_redirection_node(t_ast *cmd, t_token_type type, char *file);
+char	**copy_argv(char **argv_local, int argc);
 
 /* executor.c */
 void	execute_ast(t_ast *ast);
