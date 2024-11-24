@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:53:21 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:27:37 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,24 @@ typedef struct s_token
 }	t_token;
 
 /* Command AST Node Types */
-typedef enum e_node_type
+typedef enum e_ast_type
 {
 	NODE_COMMAND,
 	NODE_PIPE,
 	NODE_REDIRECTION,
 	NODE_SEQUENCE
-}	t_node_type;
+}	t_ast_type;
 
 /* Struct for Abstract Syntax Tree Nodes */
 typedef struct s_ast
 {
-	t_node_type			type;
+	t_ast_type			type;
 	char				**argv;
 	char				*filename;
 	int					append;
 	struct s_ast		*left;
 	struct s_ast		*right;
+	int					redirect_type;
 }	t_ast;
 
 /* Struct for Environment Variables */
@@ -107,6 +108,9 @@ t_token	*lexer(char *input);
 t_token	*tokenize(char *input, int *index);
 int		is_operator(char c);
 int		is_quote(char c);
+int		is_whitespace(char c);
+void	handle_quote(char *input, int *index, t_token *token);
+void	set_token(t_token *token, int type, const char *value, int *index);
 
 /* expand_variables.c */
 void	expand_tokens(t_token *tokens, t_env *env);
@@ -197,14 +201,7 @@ char	**env_list_to_array(t_env *env);
 void	add_env_node(t_env **env_list, t_env *new_node);
 t_env	*parse_env_var(char *env_var);
 
-/* utils/utils_strings.c */
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(const char *s1, const char *s2);
-size_t	ft_strlen(const char *s);
-char	**ft_split(const char *s, char c);
-
 /* utils/utils_memory.c */
-void	*ft_malloc(size_t size);
 void	ft_free(void *ptr);
 void	free_string_array(char **array);
 
