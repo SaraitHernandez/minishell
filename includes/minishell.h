@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:42:22 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:27:57 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ typedef struct s_ast
 	t_ast_type			type;
 	char				**argv;
 	char				*filename;
-	int					append;
 	struct s_ast		*left;
 	struct s_ast		*right;
 	int					redirect_type;
@@ -127,6 +126,7 @@ t_ast	*parse_redirections(t_ast *cmd, t_token **tokens);
 int		is_redirection(t_token_type type);
 void	syntax_error(char *message);
 t_ast	*create_command_node(char **argv);
+t_ast	*create_redirection_node(t_ast *cmd, t_token_type type, char *file);
 
 /* executor.c */
 void	execute_ast(t_ast *ast);
