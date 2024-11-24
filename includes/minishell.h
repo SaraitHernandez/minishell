@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:27:37 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:42:22 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	free_string_array(char **array);
 
 /* utils/utils_errors.c */
 void	display_error(char *message);
-void	exit_with_error(char *message, int exit_code);
+void	exit_with_error(char *message);
 void	command_not_found(char *cmd_name);
 
 #endif

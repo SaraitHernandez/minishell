@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:54:36 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:28:36 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:43:45 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void	handle_quote(char *input, int *index, t_token *token)
 	else
 	{
 		free(token);
-		exit_with_error("Syntax Error: Unmatched quote", 1);
+		exit_with_error("Syntax Error: Unmatched quote");
 	}
 }

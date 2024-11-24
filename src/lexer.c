@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:36:40 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:37:10 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:43:43 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_operator(t_token *token, char *input, int *index)
 	else
 	{
 		free(token);
-		exit_with_error("Invalid operator", 1);
+		exit_with_error("Invalid operator");
 	}
 }
 
@@ -56,7 +56,7 @@ void	handle_word(t_token *token, char *input, int *index)
 	if (!token->value)
 	{
 		free(token);
-		exit_with_error("Memory allocation failed", 1);
+		exit_with_error("Memory allocation failed");
 	}
 }
 
@@ -66,7 +66,7 @@ t_token	*tokenize(char *input, int *index)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		exit_with_error("Memory allocation failed", 1);
+		exit_with_error("Memory allocation failed");
 	token->next = NULL;
 	while (input[*index] && is_whitespace(input[*index]))
 		(*index)++;
