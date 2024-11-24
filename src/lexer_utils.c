@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:54:36 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:43:45 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:04:44 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,12 @@ int	is_whitespace(char c)
 void	set_token(t_token *token, int type, const char *value, int *index)
 {
 	token->type = type;
-	token->value = (char *)value;
+	token->value = strdup(value);
+	if (!token->value)
+	{
+		free(token);
+		exit_with_error("Memory allocation failed in set_token");
+	}
 	if (type == TOKEN_REDIRECT_APPEND || type == TOKEN_HEREDOC)
 		(*index) += 2;
 	else

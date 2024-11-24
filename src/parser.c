@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:47:00 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 18:24:30 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:41:01 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,15 @@ t_ast	*parse_pipeline(t_token **tokens)
 	{
 		*tokens = (*tokens)->next;
 		right = parse_command(tokens);
+		if (!right)
+            display_error("Missing command after pipe");
 		pipe_node = malloc(sizeof(t_ast));
 		if (!pipe_node)
 			exit_with_error("Memory allocation failed");
 		pipe_node->type = NODE_PIPE;
+		pipe_node->argv = NULL;
+        pipe_node->filename = NULL;
+        pipe_node->redirect_type = 0;
 		pipe_node->left = left;
 		pipe_node->right = right;
 		left = pipe_node;
@@ -44,21 +49,43 @@ t_ast	*parse_pipeline(t_token **tokens)
 	return (left);
 }
 
+char **copy_argv(char **argv_local, int argc)
+{
+    char **argv;
+    int i;
+
+    argv = malloc(sizeof(char *) * (argc + 1));
+    if (!argv)
+        exit_with_error("Memory allocation failed for argv");
+
+    i = 0;
+    while (i < argc)
+    {
+        argv[i] = argv_local[i];
+        i++;
+    }
+    argv[i] = NULL;
+
+    return argv;
+}
+
 t_ast	*parse_command(t_token **tokens)
 {
 	t_ast		*cmd;
-	static char	*argv[MAX_ARGS];
+	char		*argv_local[MAX_ARGS];
 	int			argc;
+	char 		**argv;
 
-	cmd = create_command_node(NULL);
+	
 	argc = 0;
 	while (*tokens && (*tokens)->type == TOKEN_WORD && argc < (MAX_ARGS - 1))
 	{
-		argv[argc++] = (*tokens)->value;
+		argv_local[argc++] = (*tokens)->value;
 		*tokens = (*tokens)->next;
 	}
-	argv[argc] = NULL;
-	cmd->argv = argv;
+	argv_local[argc] = NULL;
+	argv = copy_argv(argv_local, argc);
+	cmd = create_command_node(argv);
 	cmd = parse_redirections(cmd, tokens);
 	return (cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 18:27:57 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:42:02 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ typedef enum e_ast_type
 {
 	NODE_COMMAND,
 	NODE_PIPE,
-	NODE_REDIRECTION,
-	NODE_SEQUENCE
+	NODE_REDIRECTION
 }	t_ast_type;
 
 /* Struct for Abstract Syntax Tree Nodes */

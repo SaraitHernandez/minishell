@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:15:42 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 18:28:03 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:56:24 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_ast	*create_redirection_node(t_ast *cmd, t_token_type type, char *file)
 	if (!redir)
 		exit_with_error("Memory allocation failed");
 	redir->type = NODE_REDIRECTION;
-	redir->filename = file;
+	redir->filename = ft_strdup(file);
 	if (type == TOKEN_REDIRECT_IN)
 		redir->redirect_type = O_RDONLY;
 	else if (type == TOKEN_REDIRECT_OUT)
