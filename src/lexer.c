@@ -40,19 +40,27 @@ void	handle_operator(t_token *token, char *input, int *index)
 void	handle_word(t_token *token, char *input, int *index)
 {
 	int	start;
+	int quote;
 
 	start = *index;
+	quote = 0;
 	while (input[*index]
 		&& !is_whitespace(input[*index])
 		&& !is_operator(input[*index]))
 	{
 		if (is_quote(input[*index]))
+		{
 			handle_quote(input, index, token);
+			quote = 1;
+		}
 		else
 			(*index)++;
 	}
 	token->type = TOKEN_WORD;
-	token->value = strndup(&input[start], *index - start);
+	if (quote)
+		token->value = strndup(&input[start + 1], (*index - start - 2));
+	else
+		token->value = strndup(&input[start], *index - start);
 	if (!token->value)
 	{
 		free(token);

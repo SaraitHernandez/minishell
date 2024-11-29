@@ -24,6 +24,8 @@ const char	*token_type_to_string(t_token_type type)
 		return ("TOKEN_REDIRECT_OUT");
 	if (type == TOKEN_REDIRECT_APPEND)
 		return ("TOKEN_REDIRECT_APPEND");
+	if (type == TOKEN_HEREDOC)
+		return ("TOKEN_HEREDOC");
 	return ("UNKNOWN_TOKEN");
 }
 
@@ -35,6 +37,8 @@ const char	*ast_type_to_string(t_ast_type type)
 		return ("NODE_PIPE");
 	if (type == NODE_REDIRECTION)
 		return ("NODE_REDIRECTION");
+	if (type == NODE_HEREDOC)
+		return ("NODE_HEREDOC");
 	return ("UNKNOWN_NODE");
 }
 
@@ -46,6 +50,8 @@ const char	*redirect_type_to_string(int redirect_type)
 		return ("O_WRONLY | O_CREAT | O_TRUNC");
 	else if (redirect_type == (O_WRONLY | O_CREAT | O_APPEND))
 		return ("O_WRONLY | O_CREAT | O_APPEND");
+	else if (redirect_type == TOKEN_HEREDOC)
+		return ("TOKEN_HEREDOC");
 	else
 		return ("UNKNOWN_REDIRECT_TYPE");
 }

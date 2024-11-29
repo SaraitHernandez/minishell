@@ -61,7 +61,8 @@ typedef enum e_ast_type
 {
 	NODE_COMMAND,
 	NODE_PIPE,
-	NODE_REDIRECTION
+	NODE_REDIRECTION,
+	NODE_HEREDOC
 }	t_ast_type;
 
 /* Struct for Abstract Syntax Tree Nodes */
@@ -69,7 +70,8 @@ typedef struct s_ast
 {
 	t_ast_type			type;
 	char				**argv;
-	char				*filename;
+	char				*filename; //for redir. and delimeters
+	char				*heredoc_content;
 	struct s_ast		*left;
 	struct s_ast		*right;
 	int					redirect_type;
@@ -123,10 +125,10 @@ t_ast		*parse_redirections(t_ast *cmd, t_token **tokens);
 
 /* parser_utils.c */
 int			is_redirection(t_token_type type);
-void		syntax_error(char *message);
 t_ast		*create_command_node(char **argv);
 t_ast		*create_redirection_node(t_ast *cmd, t_token_type type, char *file);
 char		**copy_argv(char **argv_local, int argc);
+t_ast		*last_left_child(t_ast *ast);
 
 /* executor.c */
 void		execute_ast(t_ast *ast);
@@ -142,7 +144,7 @@ void		execute_builtin(t_ast *cmd, t_env *env);
 /* redirection.c */
 int			handle_input_redirection(char *filename);
 int			handle_output_redirection(char *filename, int append);
-int			handle_heredoc(char *delimiter);
+int			handle_heredoc(t_ast *heredoc_node, t_token *tokens, t_ast *ast);
 void		restore_standard_fds(int stdin_copy, int stdout_copy);
 
 /* pipes.c */
@@ -200,6 +202,9 @@ void		free_env_list(t_env *env);
 char		**env_list_to_array(t_env *env);
 void		add_env_node(t_env **env_list, t_env *new_node);
 t_env		*parse_env_var(char *env_var);
+
+/* utils/utils_strings.c */
+char	*concat_content(char *existing, char *new_line);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);

@@ -46,12 +46,13 @@ void	print_ast_recursive(t_ast *ast, int depth)
 			i++;
 		}
 	}
-	else if (ast->type == NODE_REDIRECTION)
+	else if (ast->type == NODE_REDIRECTION || ast->type == NODE_HEREDOC)
 	{
 		print_indentation(depth + 1);
-		printf("Filename: %s\n", ast->filename);
+		printf("Filename/Delimeter: %s\n", ast->filename);
 		print_indentation(depth + 1);
 		printf("Red. Type: %s\n", redirect_type_to_string(ast->redirect_type));
+		printf("Red. Content: %s\n", ast->heredoc_content);
 	}
 	print_ast_recursive(ast->left, depth + 1);
 	print_ast_recursive(ast->right, depth + 1);

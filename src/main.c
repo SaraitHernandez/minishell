@@ -17,8 +17,11 @@ void	shell_loop(t_env *env_list)
 	char	*input;
 	t_token	*tokens;
 	t_ast	*ast;
+	t_ast	*last_child;
+	t_ast	*heredoc_node;
 
 	(void)env_list;
+	heredoc_node = NULL;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -38,6 +41,13 @@ void	shell_loop(t_env *env_list)
 		tokens = lexer(input);
 		print_tokens(tokens);
 		ast = parse_tokens(tokens);
+		last_child = last_left_child(ast);
+		if (ast->type == NODE_HEREDOC)
+			heredoc_node = ast;
+		else if ((last_child && last_child->type == NODE_HEREDOC))
+			heredoc_node = last_child;
+		if (heredoc_node)
+			handle_heredoc(heredoc_node, tokens, ast);
 		print_ast(ast);
 		free_tokens(tokens);
 		free_ast(ast);

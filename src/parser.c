@@ -41,6 +41,7 @@ t_ast	*parse_pipeline(t_token **tokens)
 		pipe_node->type = NODE_PIPE;
 		pipe_node->argv = NULL;
 		pipe_node->filename = NULL;
+		pipe_node->heredoc_content = NULL;
 		pipe_node->redirect_type = 0;
 		pipe_node->left = left;
 		pipe_node->right = right;
@@ -63,6 +64,8 @@ t_ast	*parse_command(t_token **tokens)
 		*tokens = (*tokens)->next;
 	}
 	argv_local[argc] = NULL;
+	if (argc == 0)
+        display_error("Empty command");
 	argv = copy_argv(argv_local, argc);
 	cmd = create_command_node(argv);
 	cmd = parse_redirections(cmd, tokens);
@@ -79,7 +82,7 @@ t_ast	*parse_redirections(t_ast *cmd, t_token **tokens)
 		type = (*tokens)->type;
 		*tokens = (*tokens)->next;
 		if (!*tokens || (*tokens)->type != TOKEN_WORD)
-			display_error("Missing file for redirection");
+			display_error("Missing file or delimiter for redirection");
 		file = (*tokens)->value;
 		*tokens = (*tokens)->next;
 		cmd = create_redirection_node(cmd, type, file);
