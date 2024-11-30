@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment_variables.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 16:34:55 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 18:56:06 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 22:20:31 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
