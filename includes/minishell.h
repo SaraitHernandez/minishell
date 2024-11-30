@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 17:55:39 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:11:42 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,12 @@ extern volatile sig_atomic_t	g_signal_received;
 /* main.c */
 int			main(int argc, char **argv, char **envp);
 void		shell_loop(t_env *env_list);
+
+/* main_utils.c */
+int			check_interrupt(char *input);
+int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
+int			process_heredoc(t_ast *ast, t_token *tokens, char *input);
+void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
 void		init_shell_env(char **envp, t_env **env_list);

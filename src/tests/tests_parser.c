@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 21:00:49 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 00:21:56 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:19:30 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ void	print_tokens(t_token *tokens)
 	printf("\n");
 }
 
+void	print_redir(t_ast *ast, int depth)
+{
+	print_indentation(depth + 1);
+	printf("Filename/Delimeter: %s\n", ast->filename);
+	print_indentation(depth + 1);
+	printf("Red. Type: %s\n", redirect_type_to_string(ast->redirect_type));
+	print_indentation(depth + 1);
+	printf("Red. Content: %s\n", ast->heredoc_content);
+}
+
 void	print_ast_recursive(t_ast *ast, int depth)
 {
 	int	i;
@@ -47,12 +57,7 @@ void	print_ast_recursive(t_ast *ast, int depth)
 		}
 	}
 	else if (ast->type == NODE_REDIRECTION || ast->type == NODE_HEREDOC)
-	{
-		print_indentation(depth + 1);
-		printf("Filename/Delimeter: %s\n", ast->filename);
-		printf("Red. Type: %s\n", redirect_type_to_string(ast->redirect_type));
-		printf("Red. Content: %s\n", ast->heredoc_content);
-	}
+		print_redir(ast, depth);
 	print_ast_recursive(ast->left, depth + 1);
 	print_ast_recursive(ast->right, depth + 1);
 }

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 12:55:13 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:52:25 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*concat_content(char *existing, char *new_line)
 	char	*result;
 
 	if (!existing)
-		return (strdup(new_line));
+		return (ft_strdup(new_line));
 	result = malloc(strlen(existing) + strlen(new_line) + 2);
 	if (!result)
 	{

@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/24 22:20:42 by sarherna         ###   ########.fr        #
+#    Updated: 2024/11/30 20:20:16 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ LIBFT_DIR := libft
 
 SRCS := \
 	$(SRC_DIR)/main.c \
+	$(SRC_DIR)/main_utils.c \
 	$(SRC_DIR)/init_shell.c \
 	$(SRC_DIR)/input.c \
 	$(SRC_DIR)/lexer_utils.c \

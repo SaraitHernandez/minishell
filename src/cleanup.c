@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:37:57 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 18:36:38 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:58:19 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	free_ast(t_ast *node)
 		free(node->argv);
 	if (node->filename)
 		free(node->filename);
+	if (node->heredoc_content)
+		free(node->heredoc_content);
 	free(node);
 }
 
