@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_shell.c                                       :+:      :+:    :+:   */
+/*   utils_strings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:53:07 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 12:55:13 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,12 @@ char	*concat_content(char *existing, char *new_line)
 	result = malloc(strlen(existing) + strlen(new_line) + 2);
 	if (!result)
 	{
-		free(existing);
-		free(new_line);
-		exit_with_error("Memory allocation failed during heredoc concatenation");
+		free_all(2, FREE_STRING, existing, FREE_STRING, new_line);
+		exit_with_error("Memory allocation failed");
 	}
 	strcpy(result, existing);
-    strcat(result, " ");
+	strcat(result, " ");
 	strcat(result, new_line);
-	free(existing);
-	free(new_line);
+	free_all(2, FREE_STRING, existing, FREE_STRING, new_line);
 	return (result);
 }

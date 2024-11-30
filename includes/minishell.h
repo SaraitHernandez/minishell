@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 22:19:55 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:55:39 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
+# include <stdarg.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 # include "libft.h"
 
 /* Constants */
@@ -84,6 +86,15 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+/* Struct for free Variables */
+typedef enum e_free_type
+{
+	FREE_STRING,
+	FREE_TOKEN,
+	FREE_AST,
+	ERROR_MSG,
+}	t_free_type;
 
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
@@ -163,6 +174,7 @@ void		setup_heredoc_signal_handlers(void);
 void		cleanup_shell(t_env *env, t_ast *ast);
 void		free_ast(t_ast *ast);
 void		free_tokens(t_token *tokens);
+void		free_all(int count, ...);
 
 /* builtins/builtin_echo.c */
 int			builtin_echo(char **argv);
@@ -204,7 +216,7 @@ void		add_env_node(t_env **env_list, t_env *new_node);
 t_env		*parse_env_var(char *env_var);
 
 /* utils/utils_strings.c */
-char	*concat_content(char *existing, char *new_line);
+char		*concat_content(char *existing, char *new_line);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);
@@ -223,4 +235,5 @@ const char	*redirect_type_to_string(int redirect_type);
 void		print_ast_recursive(t_ast *ast, int depth);
 void		print_ast(t_ast *ast);
 void		print_indentation(int depth);
+void		reset_terminal_settings(void);
 #endif

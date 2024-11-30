@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 21:00:49 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 22:19:26 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:21:56 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	print_ast_recursive(t_ast *ast, int depth)
 	{
 		print_indentation(depth + 1);
 		printf("Filename/Delimeter: %s\n", ast->filename);
-		print_indentation(depth + 1);
 		printf("Red. Type: %s\n", redirect_type_to_string(ast->redirect_type));
 		printf("Red. Content: %s\n", ast->heredoc_content);
 	}

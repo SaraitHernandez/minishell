@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:55:55 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 18:12:10 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	sigquit_handler(int signo)
 void	heredoc_signal_handler(int signo)
 {
 	(void)signo;
-	write(STDOUT_FILENO, "\n", 1);
 	g_signal_received = SIGINT;
+	reset_terminal_settings();
 }
 
 void	setup_signal_handlers(void)
@@ -62,5 +62,4 @@ void	setup_heredoc_signal_handlers(void)
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-	signal(SIGQUIT, SIG_IGN);
 }

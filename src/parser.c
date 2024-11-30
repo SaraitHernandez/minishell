@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:47:00 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 20:56:07 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 14:02:16 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_ast	*parse_command(t_token **tokens)
 	}
 	argv_local[argc] = NULL;
 	if (argc == 0)
-        display_error("Empty command");
+		return (NULL);
 	argv = copy_argv(argv_local, argc);
 	cmd = create_command_node(argv);
 	cmd = parse_redirections(cmd, tokens);
