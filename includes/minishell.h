@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:53:21 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 21:39:40 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -31,10 +32,15 @@
 /* Constants */
 # define TRUE 1
 # define FALSE 0
-# define BUFFER_SIZE 1024
+# define BUFFER_SIZE 4096
 # define STDIN_FD 0
 # define STDOUT_FD 1
 # define STDERR_FD 2
+# define ERROR 1
+# define SUCCESS 0
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 /* Token Types */
 typedef enum e_token_type
@@ -159,27 +165,27 @@ void	free_ast(t_ast *ast);
 void	free_tokens(t_token *tokens);
 
 /* builtins/builtin_echo.c */
-int		builtin_echo(char **argv);
+int		bin_echo(char **argv);
 
 /* builtins/builtin_cd.c */
-int		builtin_cd(char **argv, t_env *env);
+int		bin_cd(char **argv, t_env *env);
 
 /* builtins/builtin_pwd.c */
-int		builtin_pwd(void);
+int		bin_pwd(void);
 
 /* builtins/builtin_export.c */
-int		builtin_export(char **argv, t_env *env);
+int		bin_export(char **argv, t_env *env);
 void	add_env_variable(char *assignment, t_env *env);
 
 /* builtins/builtin_unset.c */
-int		builtin_unset(char **argv, t_env *env);
+int		bin_unset(char **argv, t_env *env);
 void	remove_env_variable(char *var_name, t_env *env);
 
 /* builtins/builtin_env.c */
-int		builtin_env(t_env *env);
+int		bin_env(t_env *env);
 
 /* builtins/builtin_exit.c */
-int		builtin_exit(char **argv);
+int		bin_exit(char **argv);
 
 /* environment/environment.c */
 t_env	*copy_environment(char **envp);
@@ -196,6 +202,13 @@ void	free_env_list(t_env *env);
 char	**env_list_to_array(t_env *env);
 void	add_env_node(t_env **env_list, t_env *new_node);
 t_env	*parse_env_var(char *env_var);
+
+/* environment/environment_export.c */
+void	env_export_print(t_env *env);
+
+/* utils/utils_arrays.c */
+void	free_array(int i, char **array);
+char	**list_to_array(t_env *env_list);
 
 /* utils/utils_strings.c */
 char	*ft_strdup(const char *s1);

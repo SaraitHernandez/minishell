@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
+#    By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/16 16:39:18 by sarherna         ###   ########.fr        #
+#    Updated: 2024/11/28 00:21:08 by akacprzy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,8 @@ SRCS := \
 	$(ENV_DIR)/environment.c \
 	$(ENV_DIR)/environment_utils.c \
 	$(ENV_DIR)/enviroment_variables.c \
+	$(ENV_DIR)/environment_export.c \
+	$(UTILS_DIR)/utils_arrays.c \
 	$(UTILS_DIR)/utils_strings.c \
 	$(UTILS_DIR)/utils_memory.c \
 	$(UTILS_DIR)/utils_errors.c
