@@ -16,13 +16,16 @@ SRC_DIR := src
 BUILTINS_DIR := $(SRC_DIR)/builtins
 ENV_DIR := $(SRC_DIR)/environment
 UTILS_DIR := $(SRC_DIR)/utils
+TESTS_DIR := $(SRC_DIR)/tests
 INCLUDE_DIR := includes
 LIBFT_DIR := libft
 
 SRCS := \
 	$(SRC_DIR)/main.c \
+	$(SRC_DIR)/main_utils.c \
 	$(SRC_DIR)/init_shell.c \
 	$(SRC_DIR)/input.c \
+	$(SRC_DIR)/lexer_utils.c \
 	$(SRC_DIR)/lexer.c \
 	$(SRC_DIR)/expand_variables.c \
 	$(SRC_DIR)/parser.c \
@@ -48,7 +51,10 @@ SRCS := \
 	$(UTILS_DIR)/utils_arrays.c \
 	$(UTILS_DIR)/utils_strings.c \
 	$(UTILS_DIR)/utils_memory.c \
-	$(UTILS_DIR)/utils_errors.c
+	$(UTILS_DIR)/utils_errors.c \
+	$(TESTS_DIR)/tests_parser.c \
+	$(TESTS_DIR)/tests_parser_utils.c \
+
 
 OBJS := $(SRCS:.c=.o)
 

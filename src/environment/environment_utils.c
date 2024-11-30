@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:27:17 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 19:35:42 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:43:53 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_env	*create_env_node(char *key, char *value)
 
 	node = malloc(sizeof(t_env));
 	if (!node)
-		exit_with_error("Memory allocation failed", 1);
+		exit_with_error("Memory allocation failed");
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
 	node->next = NULL;

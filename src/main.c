@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/17 19:03:14 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:16:29 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	shell_loop(t_env *env_list)
 {
 	char	*input;
+	t_token	*tokens;
+	t_ast	*ast;
 
 	(void)env_list;
 	while (1)
@@ -27,13 +29,16 @@ void	shell_loop(t_env *env_list)
 		}
 		if (*input)
 			add_history(input);
-		if (g_signal_received == SIGINT)
-		{
-			g_signal_received = 0;
-			free(input);
+		if (check_interrupt(input))
 			continue ;
-		}
-		free(input);
+		tokens = lexer(input);
+		ast = parse_tokens(tokens);
+		if (check_ast_null(input, tokens, ast))
+			continue ;
+		if (process_heredoc(ast, tokens, input))
+			continue ;
+		debug_print(tokens, ast);  //removing this solves the norminette problem
+		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
 	}
 }
 
