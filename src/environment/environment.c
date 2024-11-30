@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 10:37:19 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/16 18:55:17 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/11/28 02:43:01 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,38 @@ void	set_env_value(char *key, char *value, t_env **env)
 	add_env_node(env, new_node);
 }
 
+void	free_env_node(t_env *env)
+{
+	free(env->key);
+	free(env->value);
+	free(env);
+}
+
 void	unset_env_value(char *key, t_env *env)
 {
-	(void)env;
-	(void)key;
+	t_env	*temp;
+	t_env	*current;
+
+	if (ft_strcmp(env->key, key) == 0)
+	{
+		temp = env;
+		env = env->next;
+		free_env_node(temp);
+	}
+	else
+	{
+		current = env;
+		while (current->next != NULL)
+		{
+			if (ft_strcmp(current->next->key, key) == 0)
+			{
+				temp = current->next;
+				current->next = current->next->next;
+				free_env_node(temp);
+				break ;
+			}
+			else
+				current = current->next;
+		}
+	}
 }

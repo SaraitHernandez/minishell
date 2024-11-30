@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 22:16:38 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/26 22:25:51 by akacprzy         ###   ########.fr       */
+/*   Created: 2024/03/11 21:43:06 by akacprzy          #+#    #+#             */
+/*   Updated: 2024/03/15 20:33:43 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	bin_pwd(void)
+void	ft_putendl_fd(char *s, int fd)
 {
-	char	cwd[PATH_MAX];
+	int	i;
 
-	if (getcwd(cwd, PATH_MAX))
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
 	{
-		ft_putendl_fd(cwd, 1);
-		return (SUCCESS);
+		write(fd, &s[i], 1);
+		i++;
 	}
-	else
-		return (ERROR);
+	write(fd, "\n", 1);
 }

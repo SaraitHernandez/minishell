@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
+#    By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/01 12:21:24 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/17 11:02:41 by sarherna         ###   ########.fr        #
+#    Updated: 2024/11/28 01:02:41 by akacprzy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 SRCS = 	ft_strlen.c ft_strcmp.c ft_strdup.c ft_substr.c ft_strchr.c \
-		ft_itoa.c ft_atoi.c ft_memset.c
+		ft_itoa.c ft_atoi.c ft_memset.c ft_putendl_fd.c ft_putstr_fd.c \
+		ft_isalnum.c ft_isdigit.c
 OBJS = $(SRCS:.c=.o)
 FLAGS = -Wall -Wextra -Werror
 

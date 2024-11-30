@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 22:16:38 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/26 22:25:51 by akacprzy         ###   ########.fr       */
+/*   Created: 2024/01/23 18:29:28 by akacprzy          #+#    #+#             */
+/*   Updated: 2024/03/06 22:01:04 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	bin_pwd(void)
+int	ft_isdigit(int c)
 {
-	char	cwd[PATH_MAX];
-
-	if (getcwd(cwd, PATH_MAX))
-	{
-		ft_putendl_fd(cwd, 1);
-		return (SUCCESS);
-	}
+	if ((c < '0') || (c > '9'))
+		return (0);
 	else
-		return (ERROR);
+		return (1);
 }
