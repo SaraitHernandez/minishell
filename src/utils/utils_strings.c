@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 11:33:24 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:23:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,22 @@ char	*concat_content(char *existing, char *new_line)
 	ft_strcat(result, new_line);
 	free_all(2, FREE_STRING, existing, FREE_STRING, new_line);
 	return (result);
+}
+
+char	**copy_argv(char **argv_local, int argc)
+{
+	char	**argv;
+	int		i;
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
+		exit_with_error("Memory allocation failed for argv");
+	i = 0;
+	while (i < argc)
+	{
+		argv[i] = argv_local[i];
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
 }

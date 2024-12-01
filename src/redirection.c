@@ -6,12 +6,12 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 18:33:30 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:07:24 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 char	*dup_delimiter(t_ast *heredoc_node, t_token *tokens, t_ast *ast)
 {
 	char	*delimiter;
@@ -50,7 +50,7 @@ int	handle_heredoc(t_ast *heredoc_node, t_token *tokens, t_ast *ast)
 	setup_signal_handlers();
 	return (0);
 }
-
+*/
 void	reset_terminal_settings(void)
 {
 	struct termios	term_attrs;

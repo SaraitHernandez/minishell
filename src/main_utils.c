@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 20:08:41 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 20:14:39 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:24:34 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	process_heredoc(t_ast *ast, t_token *tokens, char *input)
 	t_ast	*heredoc_node;
 	t_ast	*last_child;
 	int		heredoc_status;
-
+	
+	(void)heredoc_node;
 	heredoc_node = NULL;
 	last_child = last_left_child(ast);
 	heredoc_status = 0;
@@ -46,8 +47,8 @@ int	process_heredoc(t_ast *ast, t_token *tokens, char *input)
 		heredoc_node = ast;
 	else if (last_child && last_child->type == NODE_HEREDOC)
 		heredoc_node = last_child;
-	if (heredoc_node)
-		heredoc_status = handle_heredoc(heredoc_node, tokens, ast);
+	//if (heredoc_node)
+	//	heredoc_status = handle_heredoc(heredoc_node, tokens, ast);
 	if (heredoc_status == 1)
 	{
 		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);

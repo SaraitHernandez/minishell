@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 11:34:48 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:28:32 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,24 @@ typedef enum e_ast_type
 	NODE_HEREDOC
 }	t_ast_type;
 
+/* Struct for redirection */
+
+typedef struct s_redirection
+{
+	t_token_type			type;
+	char					*filename;
+	char					**heredoc_args;
+	struct s_redirection	*next;
+}	t_red;
+
 /* Struct for Abstract Syntax Tree Nodes */
 typedef struct s_ast
 {
 	t_ast_type			type;
 	char				**argv;
-	char				*filename; //for redir. and delimeters
-	char				*heredoc_content;
+	t_red				*redirections;
 	struct s_ast		*left;
 	struct s_ast		*right;
-	int					redirect_type;
 }	t_ast;
 
 /* Struct for Environment Variables */
@@ -143,14 +151,20 @@ char		*get_variable_value(char *var_name, t_env *env);
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);
 t_ast		*parse_pipeline(t_token **tokens);
-t_ast		*parse_command(t_token **tokens);
-t_ast		*parse_redirections(t_ast *cmd, t_token **tokens);
+t_ast		*parse_simple_command(t_token **tokens);
 
 /* parser_utils.c */
 int			is_redirection(t_token_type type);
-t_ast		*create_command_node(char **argv);
-t_ast		*create_redirection_node(t_ast *cmd, t_token_type type, char *file);
-char		**copy_argv(char **argv_local, int argc);
+void		add_redirection(t_red **head, t_red *new_redir);
+t_red		*create_redirection_node(t_token_type type, char *filename);
+t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
+t_ast		*create_pipe_node(t_ast *left, t_ast *right);
+
+/* Additional Prototypes */
+void		parse_word_token(t_token **tokens, char **argv_local, int *argc);
+int			parse_redirection_token(t_token **tokens, t_red **redirs);
+int			parse_command_elements(t_token **tokens, char **argv_local,
+				int *argc, t_red **redirs);
 t_ast		*last_left_child(t_ast *ast);
 
 /* executor.c */
@@ -237,6 +251,8 @@ char		**list_to_array(t_env *env_list);
 /* utils/utils_strings.c */
 char		*concat_content(char *existing, char *new_line);
 char		*ft_strndup(const char *s, size_t n);
+
+char		**copy_argv(char **argv_local, int argc);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);

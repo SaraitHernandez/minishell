@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/12/01 19:05:27 by sarherna         ###   ########.fr        #
+#    Updated: 2024/12/01 21:01:11 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS := \
 	$(SRC_DIR)/expand_variables.c \
 	$(SRC_DIR)/parser.c \
 	$(SRC_DIR)/parser_utils.c \
+	$(SRC_DIR)/parser_nodes.c \
 	$(SRC_DIR)/executor.c \
 	$(SRC_DIR)/exec_utils.c \
 	$(SRC_DIR)/redirection.c \
