@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:35:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 13:43:42 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:26:21 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,28 @@
 void	display_error(char *message)
 {
 	if (message)
-		fprintf(stderr, "%s\n", message);
+	{
+		write(STDERR_FILENO, message, ft_strlen(message));
+		write(STDERR_FILENO, "\n", 1);
+	}
 }
 
 void	exit_with_error(char *message)
 {
 	if (message)
-		fprintf(stderr, "%s\n", message);
+	{
+		write(STDERR_FILENO, message, ft_strlen(message));
+		write(STDERR_FILENO, "\n", 1);
+	}
 	exit(EXIT_FAILURE);
 }
 
 void	comand_not_found(char *cmd_name)
 {
 	if (cmd_name)
-		fprintf(stderr, "command not found:  %s\n", cmd_name);
+	{
+		write(STDERR_FILENO, "command not found:  ", 20);
+		write(STDERR_FILENO, cmd_name, ft_strlen(cmd_name));
+		write(STDERR_FILENO, "\n", 1);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 18:12:10 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:12:19 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	setup_heredoc_signal_handlers(void)
 {
 	struct sigaction	sa_int;
 
-	memset(&sa_int, 0, sizeof(sa_int));
+	ft_memset(&sa_int, 0, sizeof(sa_int));
 	sa_int.sa_handler = heredoc_signal_handler;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;

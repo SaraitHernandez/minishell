@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 21:39:40 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:34:48 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,27 +189,27 @@ void		free_tokens(t_token *tokens);
 void		free_all(int count, ...);
 
 /* builtins/builtin_echo.c */
-int		bin_echo(char **argv);
+int			bin_echo(char **argv);
 
 /* builtins/builtin_cd.c */
-int		bin_cd(char **argv, t_env *env);
+int			bin_cd(char **argv, t_env *env);
 
 /* builtins/builtin_pwd.c */
-int		bin_pwd(void);
+int			bin_pwd(void);
 
 /* builtins/builtin_export.c */
-int		bin_export(char **argv, t_env *env);
-void	add_env_variable(char *assignment, t_env *env);
+int			bin_export(char **argv, t_env *env);
+void		add_env_variable(char *assignment, t_env *env);
 
 /* builtins/builtin_unset.c */
-int		bin_unset(char **argv, t_env *env);
-void	remove_env_variable(char *var_name, t_env *env);
+int			bin_unset(char **argv, t_env *env);
+void		remove_env_variable(char *var_name, t_env *env);
 
 /* builtins/builtin_env.c */
-int		bin_env(t_env *env);
+int			bin_env(t_env *env);
 
 /* builtins/builtin_exit.c */
-int		bin_exit(char **argv);
+int			bin_exit(char **argv);
 
 /* environment/environment.c */
 t_env		*copy_environment(char **envp);
@@ -228,14 +228,15 @@ void		add_env_node(t_env **env_list, t_env *new_node);
 t_env		*parse_env_var(char *env_var);
 
 /* environment/environment_export.c */
-void	env_export_print(t_env *env);
+void		env_export_print(t_env *env);
 
 /* utils/utils_arrays.c */
-void	free_array(int i, char **array);
-char	**list_to_array(t_env *env_list);
+void		free_array(int i, char **array);
+char		**list_to_array(t_env *env_list);
 
 /* utils/utils_strings.c */
 char		*concat_content(char *existing, char *new_line);
+char		*ft_strndup(const char *s, size_t n);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);
