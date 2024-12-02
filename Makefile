@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+         #
+#    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/28 00:21:08 by akacprzy         ###   ########.fr        #
+#    Updated: 2024/12/01 22:08:13 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,9 +30,11 @@ SRCS := \
 	$(SRC_DIR)/expand_variables.c \
 	$(SRC_DIR)/parser.c \
 	$(SRC_DIR)/parser_utils.c \
+	$(SRC_DIR)/parser_nodes.c \
 	$(SRC_DIR)/executor.c \
 	$(SRC_DIR)/exec_utils.c \
 	$(SRC_DIR)/redirection.c \
+	$(SRC_DIR)/heredoc.c \
 	$(SRC_DIR)/pipes.c \
 	$(SRC_DIR)/signals.c \
 	$(SRC_DIR)/cleanup.c \
@@ -46,7 +48,7 @@ SRCS := \
 	$(BUILTINS_DIR)/builtin_exit.c \
 	$(ENV_DIR)/environment.c \
 	$(ENV_DIR)/environment_utils.c \
-	$(ENV_DIR)/enviroment_variables.c \
+	$(ENV_DIR)/environment_variables.c \
 	$(ENV_DIR)/environment_export.c \
 	$(UTILS_DIR)/utils_arrays.c \
 	$(UTILS_DIR)/utils_strings.c \

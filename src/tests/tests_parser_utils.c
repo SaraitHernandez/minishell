@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 22:17:13 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 22:19:39 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:17:16 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,9 @@ const char	*token_type_to_string(t_token_type type)
 		return ("TOKEN_REDIRECT_APPEND");
 	if (type == TOKEN_HEREDOC)
 		return ("TOKEN_HEREDOC");
+	if (type == TOKEN_EOF)
+		return ("TOKEN_EOF");
 	return ("UNKNOWN_TOKEN");
-}
-
-const char	*ast_type_to_string(t_ast_type type)
-{
-	if (type == NODE_COMMAND)
-		return ("NODE_COMMAND");
-	if (type == NODE_PIPE)
-		return ("NODE_PIPE");
-	if (type == NODE_REDIRECTION)
-		return ("NODE_REDIRECTION");
-	if (type == NODE_HEREDOC)
-		return ("NODE_HEREDOC");
-	return ("UNKNOWN_NODE");
-}
-
-const char	*redirect_type_to_string(int redirect_type)
-{
-	if (redirect_type == O_RDONLY)
-		return ("O_RDONLY");
-	else if (redirect_type == (O_WRONLY | O_CREAT | O_TRUNC))
-		return ("O_WRONLY | O_CREAT | O_TRUNC");
-	else if (redirect_type == (O_WRONLY | O_CREAT | O_APPEND))
-		return ("O_WRONLY | O_CREAT | O_APPEND");
-	else if (redirect_type == TOKEN_HEREDOC)
-		return ("TOKEN_HEREDOC");
-	else
-		return ("UNKNOWN_REDIRECT_TYPE");
 }
 
 void	print_indentation(int depth)

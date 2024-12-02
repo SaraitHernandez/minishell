@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 21:39:40 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:08:34 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,25 @@ typedef enum e_ast_type
 	NODE_HEREDOC
 }	t_ast_type;
 
+/* Struct for redirection */
+
+typedef struct s_redirection
+{
+	t_token_type			type;
+	char					*filename;
+	char					**heredoc_args;
+	int						fd;
+	struct s_redirection	*next;
+}	t_red;
+
 /* Struct for Abstract Syntax Tree Nodes */
 typedef struct s_ast
 {
 	t_ast_type			type;
 	char				**argv;
-	char				*filename; //for redir. and delimeters
-	char				*heredoc_content;
+	t_red				*redirections;
 	struct s_ast		*left;
 	struct s_ast		*right;
-	int					redirect_type;
 }	t_ast;
 
 /* Struct for Environment Variables */
@@ -114,7 +123,7 @@ void		shell_loop(t_env *env_list);
 /* main_utils.c */
 int			check_interrupt(char *input);
 int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
-int			process_heredoc(t_ast *ast, t_token *tokens, char *input);
+int			process_heredocs(t_ast *ast);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
@@ -143,21 +152,26 @@ char		*get_variable_value(char *var_name, t_env *env);
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);
 t_ast		*parse_pipeline(t_token **tokens);
-t_ast		*parse_command(t_token **tokens);
-t_ast		*parse_redirections(t_ast *cmd, t_token **tokens);
+t_ast		*parse_simple_command(t_token **tokens);
 
 /* parser_utils.c */
 int			is_redirection(t_token_type type);
-t_ast		*create_command_node(char **argv);
-t_ast		*create_redirection_node(t_ast *cmd, t_token_type type, char *file);
-char		**copy_argv(char **argv_local, int argc);
+void		add_redirection(t_red **head, t_red *new_redir);
+t_red		*create_redirection_node(t_token_type type, char *filename);
+t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
+t_ast		*create_pipe_node(t_ast *left, t_ast *right);
+
+/* Additional Prototypes */
+void		parse_word_token(t_token **tokens, char **argv_local, int *argc);
+int			parse_redirection_token(t_token **tokens, t_red **redirs);
+int			parse_command_elements(t_token **tokens, char **argv_local,
+				int *argc, t_red **redirs);
 t_ast		*last_left_child(t_ast *ast);
 
 /* executor.c */
 void		execute_ast(t_ast *ast);
 void		execute_pipeline(t_ast *pipeline);
 void		execute_command(t_ast *cmd);
-void		setup_redirections(t_ast *cmd);
 
 /* exec_utils.c */
 char		*find_executable(char *cmd_name, t_env *env);
@@ -165,10 +179,7 @@ int			is_builtin(char *cmd_name);
 void		execute_builtin(t_ast *cmd, t_env *env);
 
 /* redirection.c */
-int			handle_input_redirection(char *filename);
-int			handle_output_redirection(char *filename, int append);
-int			handle_heredoc(t_ast *heredoc_node, t_token *tokens, t_ast *ast);
-void		restore_standard_fds(int stdin_copy, int stdout_copy);
+int			setup_redirections(t_red *redirs);
 
 /* pipes.c */
 int			setup_pipes(int pipefd[2]);
@@ -189,27 +200,27 @@ void		free_tokens(t_token *tokens);
 void		free_all(int count, ...);
 
 /* builtins/builtin_echo.c */
-int		bin_echo(char **argv);
+int			bin_echo(char **argv);
 
 /* builtins/builtin_cd.c */
-int		bin_cd(char **argv, t_env *env);
+int			bin_cd(char **argv, t_env *env);
 
 /* builtins/builtin_pwd.c */
-int		bin_pwd(void);
+int			bin_pwd(void);
 
 /* builtins/builtin_export.c */
-int		bin_export(char **argv, t_env *env);
-void	add_env_variable(char *assignment, t_env *env);
+int			bin_export(char **argv, t_env *env);
+void		add_env_variable(char *assignment, t_env *env);
 
 /* builtins/builtin_unset.c */
-int		bin_unset(char **argv, t_env *env);
-void	remove_env_variable(char *var_name, t_env *env);
+int			bin_unset(char **argv, t_env *env);
+void		remove_env_variable(char *var_name, t_env *env);
 
 /* builtins/builtin_env.c */
-int		bin_env(t_env *env);
+int			bin_env(t_env *env);
 
 /* builtins/builtin_exit.c */
-int		bin_exit(char **argv);
+int			bin_exit(char **argv);
 
 /* environment/environment.c */
 t_env		*copy_environment(char **envp);
@@ -228,14 +239,17 @@ void		add_env_node(t_env **env_list, t_env *new_node);
 t_env		*parse_env_var(char *env_var);
 
 /* environment/environment_export.c */
-void	env_export_print(t_env *env);
+void		env_export_print(t_env *env);
 
 /* utils/utils_arrays.c */
-void	free_array(int i, char **array);
-char	**list_to_array(t_env *env_list);
+void		free_array(int i, char **array);
+char		**list_to_array(t_env *env_list);
 
 /* utils/utils_strings.c */
 char		*concat_content(char *existing, char *new_line);
+char		*ft_strndup(const char *s, size_t n);
+
+char		**copy_argv(char **argv_local, int argc);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:47:00 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 14:02:16 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:25:50 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,66 +26,55 @@ t_ast	*parse_pipeline(t_token **tokens)
 {
 	t_ast	*left;
 	t_ast	*right;
-	t_ast	*pipe_node;
 
-	left = parse_command(tokens);
+	left = parse_simple_command(tokens);
 	while (*tokens && (*tokens)->type == TOKEN_PIPE)
 	{
 		*tokens = (*tokens)->next;
-		right = parse_command(tokens);
+		right = parse_simple_command(tokens);
 		if (!right)
+		{
 			display_error("Missing command after pipe");
-		pipe_node = malloc(sizeof(t_ast));
-		if (!pipe_node)
-			exit_with_error("Memory allocation failed");
-		pipe_node->type = NODE_PIPE;
-		pipe_node->argv = NULL;
-		pipe_node->filename = NULL;
-		pipe_node->heredoc_content = NULL;
-		pipe_node->redirect_type = 0;
-		pipe_node->left = left;
-		pipe_node->right = right;
-		left = pipe_node;
+			return (NULL);
+		}
+		left = create_pipe_node(left, right);
 	}
 	return (left);
 }
 
-t_ast	*parse_command(t_token **tokens)
+t_ast	*parse_simple_command(t_token **tokens)
 {
-	t_ast		*cmd;
-	char		*argv_local[MAX_ARGS];
-	int			argc;
-	char		**argv;
+	t_ast	*cmd;
+	char	*argv_local[MAX_ARGS];
+	int		argc;
+	t_red	*redirs;
 
 	argc = 0;
-	while (*tokens && (*tokens)->type == TOKEN_WORD && argc < (MAX_ARGS - 1))
-	{
-		argv_local[argc++] = (*tokens)->value;
-		*tokens = (*tokens)->next;
-	}
-	argv_local[argc] = NULL;
-	if (argc == 0)
+	redirs = NULL;
+	if (!parse_command_elements(tokens, argv_local, &argc, &redirs))
 		return (NULL);
-	argv = copy_argv(argv_local, argc);
-	cmd = create_command_node(argv);
-	cmd = parse_redirections(cmd, tokens);
+	argv_local[argc] = NULL;
+	if (argc == 0 && !redirs)
+		return (NULL);
+	cmd = create_command_node(argv_local, argc, redirs);
 	return (cmd);
 }
 
-t_ast	*parse_redirections(t_ast *cmd, t_token **tokens)
+int	parse_command_elements(t_token **tokens, char **argv_local,
+	int *argc, t_red **redirs)
 {
-	t_token_type	type;
-	char			*file;
-
-	while (*tokens && is_redirection((*tokens)->type))
+	while (*tokens && ((*tokens)->type == TOKEN_WORD
+			|| is_redirection((*tokens)->type)))
 	{
-		type = (*tokens)->type;
-		*tokens = (*tokens)->next;
-		if (!*tokens || (*tokens)->type != TOKEN_WORD)
-			display_error("Missing file or delimiter for redirection");
-		file = (*tokens)->value;
-		*tokens = (*tokens)->next;
-		cmd = create_redirection_node(cmd, type, file);
+		if ((*tokens)->type == TOKEN_WORD && *argc < (MAX_ARGS - 1))
+			parse_word_token(tokens, argv_local, argc);
+		else if (is_redirection((*tokens)->type))
+		{
+			if (!parse_redirection_token(tokens, redirs))
+				return (0);
+		}
+		else
+			*tokens = (*tokens)->next;
 	}
-	return (cmd);
+	return (1);
 }
