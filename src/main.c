@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 21:09:46 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:05:05 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	shell_loop(t_env *env_list)
 		ast = parse_tokens(tokens);
 		if (check_ast_null(input, tokens, ast))
 			continue ;
-		//if (process_heredoc(ast, tokens, input))
-		//	continue ;
+		if (process_heredocs(ast))
+			continue ;
 		debug_print(tokens, ast);  //removing this solves the norminette problem
 		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
 	}

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 21:28:32 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:08:34 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_redirection
 	t_token_type			type;
 	char					*filename;
 	char					**heredoc_args;
+	int						fd;
 	struct s_redirection	*next;
 }	t_red;
 
@@ -122,7 +123,7 @@ void		shell_loop(t_env *env_list);
 /* main_utils.c */
 int			check_interrupt(char *input);
 int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
-int			process_heredoc(t_ast *ast, t_token *tokens, char *input);
+int			process_heredocs(t_ast *ast);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
@@ -171,7 +172,6 @@ t_ast		*last_left_child(t_ast *ast);
 void		execute_ast(t_ast *ast);
 void		execute_pipeline(t_ast *pipeline);
 void		execute_command(t_ast *cmd);
-void		setup_redirections(t_ast *cmd);
 
 /* exec_utils.c */
 char		*find_executable(char *cmd_name, t_env *env);
@@ -179,10 +179,7 @@ int			is_builtin(char *cmd_name);
 void		execute_builtin(t_ast *cmd, t_env *env);
 
 /* redirection.c */
-int			handle_input_redirection(char *filename);
-int			handle_output_redirection(char *filename, int append);
-int			handle_heredoc(t_ast *heredoc_node, t_token *tokens, t_ast *ast);
-void		restore_standard_fds(int stdin_copy, int stdout_copy);
+int			setup_redirections(t_red *redirs);
 
 /* pipes.c */
 int			setup_pipes(int pipefd[2]);
