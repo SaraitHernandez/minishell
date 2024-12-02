@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:36:40 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 18:09:46 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:19:19 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void	handle_word(t_token *token, char *input, int *index)
 	}
 	token->type = TOKEN_WORD;
 	if (quote)
-		token->value = strndup(&input[start + 1], (*index - start - 2));
+		token->value = ft_strndup(&input[start + 1], (*index - start - 2));
 	else
-		token->value = strndup(&input[start], *index - start);
+		token->value = ft_strndup(&input[start], *index - start);
 	if (!token->value)
 		free_all(2, FREE_TOKEN, token, ERROR_MSG, "Memory allocation failed");
 }

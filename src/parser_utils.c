@@ -6,80 +6,34 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:15:42 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 00:15:52 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:23:56 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_redirection(t_token_type type)
+void	parse_word_token(t_token **tokens, char **argv_local, int *argc)
 {
-	return (type == TOKEN_REDIRECT_IN
-		|| type == TOKEN_REDIRECT_OUT
-		|| type == TOKEN_REDIRECT_APPEND
-		|| type == TOKEN_HEREDOC);
+	argv_local[(*argc)++] = (*tokens)->value;
+	*tokens = (*tokens)->next;
 }
 
-t_ast	*create_command_node(char **argv)
+int	parse_redirection_token(t_token **tokens, t_red **redirs)
 {
-	t_ast	*cmd;
+	t_token_type	type;
+	char			*filename;
 
-	cmd = malloc(sizeof(t_ast));
-	if (!cmd)
-		exit_with_error("Memory allocation failed");
-	cmd->type = NODE_COMMAND;
-	cmd->argv = argv;
-	cmd->left = NULL;
-	cmd->right = NULL;
-	cmd->filename = NULL;
-	cmd->heredoc_content = NULL;
-	cmd->redirect_type = 0;
-	return (cmd);
-}
-
-t_ast	*create_redirection_node(t_ast *cmd, t_token_type type, char *file)
-{
-	t_ast	*redir;
-
-	redir = malloc(sizeof(t_ast));
-	if (!redir)
-		exit_with_error("Memory allocation failed");
-	if (type == TOKEN_HEREDOC)
-		redir->type = NODE_HEREDOC;
-	else
-		redir->type = NODE_REDIRECTION;
-	redir->filename = ft_strdup(file);
-	if (type == TOKEN_REDIRECT_IN)
-		redir->redirect_type = O_RDONLY;
-	else if (type == TOKEN_REDIRECT_OUT)
-		redir->redirect_type = O_WRONLY | O_CREAT | O_TRUNC;
-	else if (type == TOKEN_REDIRECT_APPEND)
-		redir->redirect_type = O_WRONLY | O_CREAT | O_APPEND;
-	else if (type == TOKEN_HEREDOC)
-		redir->redirect_type = TOKEN_HEREDOC;
-	redir->left = cmd;
-	redir->right = NULL;
-	redir->argv = NULL;
-	redir->heredoc_content = NULL;
-	return (redir);
-}
-
-char	**copy_argv(char **argv_local, int argc)
-{
-	char	**argv;
-	int		i;
-
-	argv = malloc(sizeof(char *) * (argc + 1));
-	if (!argv)
-		exit_with_error("Memory allocation failed for argv");
-	i = 0;
-	while (i < argc)
+	type = (*tokens)->type;
+	*tokens = (*tokens)->next;
+	if (!*tokens || (*tokens)->type != TOKEN_WORD)
 	{
-		argv[i] = argv_local[i];
-		i++;
+		display_error("Missing file or delimiter for redirection");
+		return (0);
 	}
-	argv[i] = NULL;
-	return (argv);
+	filename = (*tokens)->value;
+	*tokens = (*tokens)->next;
+	add_redirection(redirs, create_redirection_node(type, filename));
+	return (1);
 }
 
 t_ast	*last_left_child(t_ast *ast)
@@ -89,4 +43,19 @@ t_ast	*last_left_child(t_ast *ast)
 	while (ast->left)
 		ast = ast->left;
 	return (ast);
+}
+
+void	add_redirection(t_red **head, t_red *new_redir)
+{
+	t_red	*temp;
+
+	if (!*head)
+		*head = new_redir;
+	else
+	{
+		temp = *head;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new_redir;
+	}
 }

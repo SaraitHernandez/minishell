@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 15:57:40 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/02 22:11:07 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	shell_loop(t_env *env_list, int *ret)
 		ast = parse_tokens(tokens);
 		if (check_ast_null(input, tokens, ast))
 			continue ;
-		if (process_heredoc(ast, tokens, input))
+		if (process_heredocs(ast))
 			continue ;
 		debug_print(tokens, ast);  //removing this solves the norminette problem
 		*ret = get_ast_node(ast, env_list);
