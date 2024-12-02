@@ -6,7 +6,7 @@
 #    By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/11/28 00:21:08 by akacprzy         ###   ########.fr        #
+#    Updated: 2024/12/01 14:32:42 by akacprzy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,9 @@ SRCS := \
 	$(SRC_DIR)/parser_utils.c \
 	$(SRC_DIR)/executor.c \
 	$(SRC_DIR)/exec_utils.c \
+	$(SRC_DIR)/exec_redirs.c \
+	$(SRC_DIR)/exec_pipes.c \
+	$(SRC_DIR)/exec_builtins.c \
 	$(SRC_DIR)/redirection.c \
 	$(SRC_DIR)/pipes.c \
 	$(SRC_DIR)/signals.c \

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 20:16:29 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:57:40 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	shell_loop(t_env *env_list)
+void	shell_loop(t_env *env_list, int *ret)
 {
 	char	*input;
 	t_token	*tokens;
@@ -38,6 +38,7 @@ void	shell_loop(t_env *env_list)
 		if (process_heredoc(ast, tokens, input))
 			continue ;
 		debug_print(tokens, ast);  //removing this solves the norminette problem
+		*ret = get_ast_node(ast, env_list);
 		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
 	}
 }
@@ -45,13 +46,14 @@ void	shell_loop(t_env *env_list)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env_list;
+	int		ret;
 
 	(void)argc;
 	(void)argv;
 	setup_signal_handlers();
 	init_shell_env(envp, &env_list);
-	shell_loop(env_list);
+	shell_loop(env_list, &ret);
 	rl_clear_history();
 	free_env_list(env_list);
-	return (0);
+	return (ret);
 }

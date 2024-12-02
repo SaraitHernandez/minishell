@@ -6,13 +6,13 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:27:17 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/28 00:40:07 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/01 14:58:13 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	env_array_len(char **env)
+int	env_array_len(char **env)
 {
 	int		i;
 
@@ -54,7 +54,7 @@ void	env_export_print(t_env *env)
 	int		len;
 	char	**arr;
 
-	arr = list_to_array(env);
+	arr = list_to_array(env, 0);
 	len = env_array_len(arr);
 	env_export_sort(arr, len);
 	i = 0;

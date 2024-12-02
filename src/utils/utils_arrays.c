@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 21:21:43 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/28 00:38:50 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/01 14:49:57 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	env_list_len(t_env **env_list)
 	}
 }
 
-static char	**list_to_array_sub(t_env **env_list, char **array)
+static char	**list_to_array_keys(t_env **env_list, char **array)
 {
 	int		i;
 	t_env	*current;
@@ -70,7 +70,35 @@ static char	**list_to_array_sub(t_env **env_list, char **array)
 	return (array);
 }
 
-char	**list_to_array(t_env *env_list)
+static char	**list_to_array_full(t_env **env_list, char **array)
+{
+	int		i;
+	t_env	*current;
+
+	if (!*env_list)
+	{
+		free(array);
+		return (NULL);
+	}
+	current = *env_list;
+	i = 0;
+	while (current->next)
+	{
+		*(array + i) = strdup(current->key);
+		if (!*(array + i))
+		{
+			free_array(i, array);
+			return (NULL);
+		}
+		current = current->next;
+		i++;
+	}
+	*(array + i++) = strjoin(current->key, strjoin("=", current->key));
+	*(array + i) = NULL;
+	return (array);
+}
+
+char	**list_to_array(t_env *env_list, int full)
 {
 	char	**array;
 	size_t	len;
@@ -79,6 +107,9 @@ char	**list_to_array(t_env *env_list)
 	array = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!array)
 		return (NULL);
-	array = list_to_array_sub(&env_list, array);
+	if (full == 1)
+		array = list_to_array_full(&env_list, array);
+	else
+		array = list_to_array_keys(&env_list, array);
 	return (array);
 }

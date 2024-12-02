@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/30 21:39:40 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:18:09 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct s_ast
 	t_ast_type			type;
 	char				**argv;
 	char				*filename; //for redir. and delimeters
-	char				*heredoc_content;
+	char				**heredoc_content;
 	struct s_ast		*left;
 	struct s_ast		*right;
 	int					redirect_type;
@@ -102,6 +102,14 @@ typedef enum e_free_type
 	ERROR_MSG,
 }	t_free_type;
 
+/* Struct for Environment Variables */
+typedef struct s_exec
+{
+	int	pipe;
+	int	ecode;
+	int	exit;
+}	t_exec;
+
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -109,7 +117,7 @@ extern volatile sig_atomic_t	g_signal_received;
 
 /* main.c */
 int			main(int argc, char **argv, char **envp);
-void		shell_loop(t_env *env_list);
+void		shell_loop(t_env *env_list, int *ret);
 
 /* main_utils.c */
 int			check_interrupt(char *input);
@@ -154,15 +162,28 @@ char		**copy_argv(char **argv_local, int argc);
 t_ast		*last_left_child(t_ast *ast);
 
 /* executor.c */
-void		execute_ast(t_ast *ast);
-void		execute_pipeline(t_ast *pipeline);
-void		execute_command(t_ast *cmd);
-void		setup_redirections(t_ast *cmd);
+int			get_ast_node(t_ast *ast, t_env *env);
+
+/* exec_utils.c */
+void		ppx_error(int errn);
+int			ppx_cmd_exec(char **argv, t_env *env);
+
+/* exec_redirs.c */
+void		ppx_infile_protector(int *file1);
+int			ppx_fopen(char *file, char m);
+void		ppx_here_doc(t_ast *ast);
 
 /* exec_utils.c */
 char		*find_executable(char *cmd_name, t_env *env);
 int			is_builtin(char *cmd_name);
 void		execute_builtin(t_ast *cmd, t_env *env);
+
+/* exec_pipes.c */
+void		ppx_child(char **argv, t_env *env);
+
+/* exec_builtins.c */
+int			is_builtin(char *cmd);
+int			exec_builtin(char **args, t_env *env);
 
 /* redirection.c */
 int			handle_input_redirection(char *filename);
@@ -228,11 +249,12 @@ void		add_env_node(t_env **env_list, t_env *new_node);
 t_env		*parse_env_var(char *env_var);
 
 /* environment/environment_export.c */
-void	env_export_print(t_env *env);
+int			env_array_len(char **env);
+void		env_export_print(t_env *env);
 
 /* utils/utils_arrays.c */
-void	free_array(int i, char **array);
-char	**list_to_array(t_env *env_list);
+void		free_array(int i, char **array);
+char		**list_to_array(t_env *env_list, int full);
 
 /* utils/utils_strings.c */
 char		*concat_content(char *existing, char *new_line);
