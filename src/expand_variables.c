@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:29:28 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 22:39:10 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:08:51 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*expand_variable(char *str, t_env *env)
 		{
 			if (str[i + 1] == '?')
 			{
-				var_value = ft_itoa(g_exit_status);
+				var_value = ft_itoa(1);
 				result = ft_strjoin_free(result, var_value);
 				free(var_value);
 				i += 2;

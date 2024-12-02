@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 16:48:26 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/28 00:17:35 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:14:51 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 int		ft_isalnum(int c);
 int		ft_isdigit(int c);
+char	*ft_strjoin(const char *s1, const char *s2);
 #endif

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 22:08:34 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:12:16 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void		shell_loop(t_env *env_list);
 /* main_utils.c */
 int			check_interrupt(char *input);
 int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
-int			process_heredocs(t_ast *ast);
+int			process_heredocs(t_ast *cmd,  t_env *env);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
@@ -146,8 +146,8 @@ void		set_token(t_token *token, int type, const char *value, int *index);
 
 /* expand_variables.c */
 void		expand_tokens(t_token *tokens, t_env *env);
-char		*expand_variable(char *str, int *index, t_env *env);
-char		*get_variable_value(char *var_name, t_env *env);
+char		*expand_variable(char *str, t_env *env);
+char		*get_var_name(char *str);
 
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);
@@ -250,6 +250,9 @@ char		*concat_content(char *existing, char *new_line);
 char		*ft_strndup(const char *s, size_t n);
 
 char		**copy_argv(char **argv_local, int argc);
+char		*ft_strjoin_free(char *s1, char *s2);
+char		*ft_strjoin_char(char *s1, char c);
+int			is_quoted(char *str);
 
 /* utils/utils_memory.c */
 void		ft_free(void *ptr);

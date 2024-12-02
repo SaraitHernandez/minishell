@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 21:23:47 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/02 22:59:40 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,25 @@ char	**copy_argv(char **argv_local, int argc)
 	}
 	argv[i] = NULL;
 	return (argv);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	return (result);
+}
+
+char	*ft_strjoin_char(char *s1, char c)
+{
+	char	*result;
+	char	str[2];
+
+	str[0] = c;
+	str[1] = '\0';
+	result = ft_strjoin(s1, str);
+	free(s1);
+	return (result);
 }
