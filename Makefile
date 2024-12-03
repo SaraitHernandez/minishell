@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/12/01 22:08:13 by sarherna         ###   ########.fr        #
+#    Updated: 2024/12/03 17:25:49 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS := \
 	$(SRC_DIR)/exec_utils.c \
 	$(SRC_DIR)/redirection.c \
 	$(SRC_DIR)/heredoc.c \
+	$(SRC_DIR)/heredoc_utils.c \
 	$(SRC_DIR)/pipes.c \
 	$(SRC_DIR)/signals.c \
 	$(SRC_DIR)/cleanup.c \

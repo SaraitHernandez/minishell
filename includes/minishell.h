@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 23:12:16 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:27:22 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
+	int					quoted;
 	struct s_token		*next;
 }	t_token;
 
@@ -79,7 +80,7 @@ typedef struct s_redirection
 {
 	t_token_type			type;
 	char					*filename;
-	char					**heredoc_args;
+	char					quoted;
 	int						fd;
 	struct s_redirection	*next;
 }	t_red;
@@ -123,7 +124,7 @@ void		shell_loop(t_env *env_list);
 /* main_utils.c */
 int			check_interrupt(char *input);
 int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
-int			process_heredocs(t_ast *cmd,  t_env *env);
+int			process_heredocs(t_ast *cmd, t_env *env);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
@@ -149,6 +150,9 @@ void		expand_tokens(t_token *tokens, t_env *env);
 char		*expand_variable(char *str, t_env *env);
 char		*get_var_name(char *str);
 
+/* heredoc_utils.c */
+int			handle_heredoc_interrupt(int fd);
+
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);
 t_ast		*parse_pipeline(t_token **tokens);
@@ -157,7 +161,8 @@ t_ast		*parse_simple_command(t_token **tokens);
 /* parser_utils.c */
 int			is_redirection(t_token_type type);
 void		add_redirection(t_red **head, t_red *new_redir);
-t_red		*create_redirection_node(t_token_type type, char *filename);
+t_red		*create_redirection_node(t_token_type type, char *filename,
+				int quoted);
 t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
 t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 

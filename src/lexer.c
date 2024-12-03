@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:36:40 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 11:19:19 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:46:48 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	handle_word(t_token *token, char *input, int *index)
 			(*index)++;
 	}
 	token->type = TOKEN_WORD;
+	token->quoted = quote;
 	if (quote)
 		token->value = ft_strndup(&input[start + 1], (*index - start - 2));
 	else

@@ -6,102 +6,67 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 23:16:20 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:27:10 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_heredoc_interrupt(int fd)
+static void	write_line_to_pipe(char *line, int *pipe_fd)
 {
-	close(fd);
-	g_signal_received = 0;
-	return (1);
+	write(pipe_fd[1], line, ft_strlen(line));
+	write(pipe_fd[1], "\n", 1);
 }
-/*
-int	handle_single_heredoc(t_red *redir)
+
+static char	*process_line(char *line, t_env *env, int expand)
+{
+	char	*expanded_line;
+
+	if (expand)
+	{
+		expanded_line = expand_variable(line, env);
+		free(line);
+		return (expanded_line);
+	}
+	return (line);
+}
+
+static int	handle_heredoc_reading(t_red *redir, t_env *env,
+			int *pipe_fd, int expand)
 {
 	char	*line;
-	int		pipe_fd[2];
 
-	if (pipe(pipe_fd) == -1)
-	{
-		display_error("Failed to create pipe");
-		return (1);
-	}
-	setup_heredoc_signal_handlers();
 	while (1)
 	{
 		line = readline("> ");
 		if (!line || ft_strcmp(line, redir->filename) == 0)
 			break ;
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
+		line = process_line(line, env, expand);
+		write_line_to_pipe(line, pipe_fd);
 		free(line);
 	}
 	free(line);
 	close(pipe_fd[1]);
-	setup_signal_handlers();
-	if (g_signal_received == SIGINT)
-		return (handle_heredoc_interrupt(pipe_fd[0]));
-	redir->fd = pipe_fd[0];
-	return (0);
-}
-*/
-// File: src/heredoc.c
-// File: src/utils_strings.c
-
-int	is_quoted_2(char *str)
-{
-	int	len;
-
-	len = ft_strlen(str);
-	if ((str[0] == '\'' && str[len - 1] == '\'') ||
-		(str[0] == '\"' && str[len - 1] == '\"'))
-		return (1);
-	return (0);
+	return (g_signal_received == SIGINT);
 }
 
 int	handle_single_heredoc(t_red *redir, t_env *env)
 {
-	char	*line;
 	int		pipe_fd[2];
 	int		expand;
 
 	if (pipe(pipe_fd) == -1)
-	{
-		display_error("Failed to create pipe");
-		return (1);
-	}
-
-	expand = !is_quoted_2(redir->filename);
-
+		return (display_error("Failed to create pipe"), 1);
+	expand = !redir->quoted;
 	setup_heredoc_signal_handlers();
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->filename) == 0)
-			break ;
-		if (expand)
-		{
-			char *expanded_line = expand_variable(line, env);
-			free(line);
-			line = expanded_line;
-		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(pipe_fd[1]);
-	setup_signal_handlers();
-	if (g_signal_received == SIGINT)
+	if (handle_heredoc_reading(redir, env, pipe_fd, expand))
 		return (handle_heredoc_interrupt(pipe_fd[0]));
+	setup_signal_handlers();
 	redir->fd = pipe_fd[0];
 	return (0);
 }
 
-int	process_heredocs(t_ast *cmd,  t_env *env)
+int	process_heredocs(t_ast *cmd, t_env *env)
 {
 	t_red			*redir;
 	int				status;
