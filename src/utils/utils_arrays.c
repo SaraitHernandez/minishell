@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_arrays.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 21:21:43 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/28 00:38:50 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 08:01:57 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

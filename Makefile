@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/12/01 22:08:13 by sarherna         ###   ########.fr        #
+#    Updated: 2024/12/04 14:57:02 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS := \
 	$(SRC_DIR)/main.c \
 	$(SRC_DIR)/main_utils.c \
 	$(SRC_DIR)/init_shell.c \
-	$(SRC_DIR)/input.c \
+	$(SRC_DIR)/lexer_handle_word.c \
+	$(SRC_DIR)/lexer_tokenize.c \
 	$(SRC_DIR)/lexer_utils.c \
 	$(SRC_DIR)/lexer.c \
 	$(SRC_DIR)/expand_variables.c \
@@ -35,6 +36,7 @@ SRCS := \
 	$(SRC_DIR)/exec_utils.c \
 	$(SRC_DIR)/redirection.c \
 	$(SRC_DIR)/heredoc.c \
+	$(SRC_DIR)/heredoc_utils.c \
 	$(SRC_DIR)/pipes.c \
 	$(SRC_DIR)/signals.c \
 	$(SRC_DIR)/cleanup.c \

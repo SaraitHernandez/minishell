@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 20:55:03 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 21:24:52 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:41:44 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_redirection(t_token_type type)
 		|| type == TOKEN_HEREDOC);
 }
 
-t_red	*create_redirection_node(t_token_type type, char *filename)
+t_red	*create_redirection_node(t_token_type type, char *filename, int quoted)
 {
 	t_red	*redir;
 
@@ -28,7 +28,10 @@ t_red	*create_redirection_node(t_token_type type, char *filename)
 	if (!redir)
 		exit_with_error("Memory allocation failed");
 	redir->type = type;
-	redir->filename = filename;
+	redir->filename = ft_strdup(filename);
+	if (!redir->filename)
+		exit_with_error("Memory allocation failed");
+	redir->quoted = quoted;
 	redir->next = NULL;
 	return (redir);
 }

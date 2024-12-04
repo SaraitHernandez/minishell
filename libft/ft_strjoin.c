@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_memory.c                                     :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 17:21:44 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/03 17:21:58 by sarherna         ###   ########.fr       */
+/*   Created: 2024/03/19 17:23:41 by sarherna          #+#    #+#             */
+/*   Updated: 2024/12/02 23:15:22 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-char	*ft_strjoin_free(char *s1, char *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	char	*result;
+	char	*str;
+	int		i;
+	int		j;
 
-	result = ft_strjoin(s1, s2);
-	free(s1);
-	return (result);
-}
-
-char	*ft_strjoin_char(char *s1, char c)
-{
-	char	*result;
-	char	str[2];
-
-	str[0] = c;
-	str[1] = '\0';
-	result = ft_strjoin(s1, str);
-	free(s1);
-	return (result);
+	i = 0;
+	j = 0;
+	str = calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
+	if (!str)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
 }

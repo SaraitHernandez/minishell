@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:37:57 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/01 21:05:42 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:21:18 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,39 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+void	free_redirections(t_red *redir)
+{
+	t_red	*temp;
+
+	while (redir)
+	{
+		temp = redir;
+		redir = redir->next;
+		free(temp->filename);
+		free(temp);
+	}
+}
+
 void	free_ast(t_ast *node)
 {
+	int	i;
+
 	if (!node)
 		return ;
 	free_ast(node->left);
 	free_ast(node->right);
 	if (node->argv)
+	{
+		i = 0;
+		while (node->argv[i])
+		{
+			free(node->argv[i]);
+			i++;
+		}
 		free(node->argv);
+	}
+	if (node->redirections)
+		free_redirections(node->redirections);
 	free(node);
 }
 
