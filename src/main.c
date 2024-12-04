@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 08:11:07 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:52:36 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	shell_loop(t_shell	*shell)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env_list;
 	t_shell	shell;
 
 	(void)argc;
@@ -54,9 +53,9 @@ int	main(int argc, char **argv, char **envp)
 	setup_signal_handlers();
 	shell.env_list = NULL;
     shell.exit_status = 0;
-	init_shell_env(envp, &env_list);
+	init_shell_env(envp, &shell);
 	shell_loop(&shell);
 	rl_clear_history();
-	free_env_list(env_list);
+	free_env_list(shell.env_list); //-> i need to create a free shell
 	return (0);
 }

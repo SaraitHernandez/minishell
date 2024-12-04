@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 08:10:35 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:53:31 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
-void		init_shell_env(char **envp, t_env **env_list);
-void		set_shell_level(t_env **env);
+void		init_shell_env(char **envp, t_shell *shell);
+void		set_shell_level(t_env *env);
 
 /* lexer.c */
 t_token		*lexer(char *input);
@@ -144,7 +144,7 @@ t_token		*lexer(char *input);
 int			is_operator(char c);
 int			is_quote(char c);
 int			is_whitespace(char c);
-void		handle_quote(char *input, int *index, t_token *token);
+char		*handle_quote(char *input, int *index, int *quote_flag);
 void		set_token(t_token *token, int type, const char *value, int *index);
 
 /* expand_variables.c */

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:36:40 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/03 16:46:48 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:48:36 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,35 @@ void	handle_operator(t_token *token, char *input, int *index)
 
 void	handle_word(t_token *token, char *input, int *index)
 {
-	int	start;
-	int	quote;
+	int		start;
+	int		quote;
+	char	*value;
+	char	*part;
 
 	start = *index;
 	quote = 0;
-	while (input[*index] && !is_whitespace(input[*index])
-		&& !is_operator(input[*index]))
+	value = ft_strdup("");
+	while (input[*index] && !is_whitespace(input[*index]) && !is_operator(input[*index]))
 	{
 		if (is_quote(input[*index]))
 		{
-			handle_quote(input, index, token);
-			quote = 1;
+			part = handle_quote(input, index, &quote);
+			value = ft_strjoin_free(value, part);
+			free(part);
 		}
 		else
-			(*index)++;
+		{
+			start = *index;
+			while (input[*index] && !is_whitespace(input[*index]) && !is_operator(input[*index]) && !is_quote(input[*index]))
+				(*index)++;
+			part = ft_strndup(&input[start], *index - start);
+			value = ft_strjoin_free(value, part);
+			free(part);
+		}
 	}
 	token->type = TOKEN_WORD;
 	token->quoted = quote;
-	if (quote)
-		token->value = ft_strndup(&input[start + 1], (*index - start - 2));
-	else
-		token->value = ft_strndup(&input[start], *index - start);
+	token->value = value;
 	if (!token->value)
 		free_all(2, FREE_TOKEN, token, ERROR_MSG, "Memory allocation failed");
 }

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 08:10:38 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:46:49 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,34 @@ int	handle_single_heredoc(t_red *redir, t_shell *shell)
 	return (0);
 }
 
-int	process_heredocs(t_ast *cmd, t_shell *shell)
+int	process_heredocs(t_ast *ast, t_shell *shell)
 {
-	t_red			*redir;
-	int				status;
+	int	status;
 
-	redir = cmd->redirections;
-	while (redir)
+	if (!ast)
+		return (0);
+	if (ast->type == NODE_COMMAND)
 	{
-		if (redir->type == TOKEN_HEREDOC)
+		t_red	*redir;
+
+		redir = ast->redirections;
+		while (redir)
 		{
-			status = handle_single_heredoc(redir, shell);
-			if (status != 0)
-				return (status);
+			if (redir->type == TOKEN_HEREDOC)
+			{
+				status = handle_single_heredoc(redir, shell);
+				if (status != 0)
+					return (status);
+			}
+			redir = redir->next;
 		}
-		redir = redir->next;
+	}
+	else if (ast->type == NODE_PIPE)
+	{
+		if (process_heredocs(ast->left, shell) != 0)
+			return (1);
+		if (process_heredocs(ast->right, shell) != 0)
+			return (1);
 	}
 	return (0);
 }

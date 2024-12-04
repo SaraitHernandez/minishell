@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:15:42 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 07:53:51 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:40:54 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	parse_word_token(t_token **tokens, char **argv_local, int *argc)
 {
-	argv_local[(*argc)++] = (*tokens)->value;
+	argv_local[(*argc)++] = ft_strdup((*tokens)->value);
 	*tokens = (*tokens)->next;
 }
 
