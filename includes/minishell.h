@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 22:13:37 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 00:57:17 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,6 @@ typedef enum e_free_type
 	ERROR_MSG,
 }	t_free_type;
 
-/* Struct for Environment Variables */
-typedef struct s_exec
-{
-	int	pipe;
-	int	ecode;
-	int	exit;
-}	t_exec;
-
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -177,36 +169,28 @@ int			parse_command_elements(t_token **tokens, char **argv_local,
 t_ast		*last_left_child(t_ast *ast);
 
 /* executor.c */
-int			get_ast_node(t_ast *ast, t_env *env);
+void		get_ast_node(t_ast *ast, t_env *env, int *ret);
 
 /* exec_utils.c */
 void		ppx_error(int errn);
 int			ppx_cmd_exec(char **argv, t_env *env);
+void		ppx_child(t_ast *ast, t_env *env, int *ret);
 
 /* exec_redirs.c */
 void		ppx_infile_protector(int *file1);
 int			ppx_fopen(char *file, char m);
 void		ppx_here_doc(t_ast *ast);
 
-/* exec_utils.c */
-char		*find_executable(char *cmd_name, t_env *env);
-int			is_builtin(char *cmd_name);
-void		execute_builtin(t_ast *cmd, t_env *env);
-
 /* exec_pipes.c */
-void		ppx_child(char **argv, t_env *env);
+void		ppx_pipe(t_ast *ast, t_env *env, int *ret);
 
 /* exec_builtins.c */
 int			is_builtin(char *cmd);
-int			exec_builtin(char **args, t_env *env);
+void		exec_builtin(char **args, t_env *env, int *ret);
 
 /* redirection.c */
 int			setup_redirections(t_red *redirs);
-
-/* pipes.c */
-int			setup_pipes(int pipefd[2]);
-void		close_pipes(int pipefd[2]);
-void		redirect_pipes(int input_fd, int output_fd);
+int			handle_redirection(t_red *redirs);
 
 /* signals.c */
 void		sigint_handler(int signo);

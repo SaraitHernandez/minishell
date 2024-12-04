@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/01 15:02:42 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 01:48:13 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,28 @@ int	ppx_cmd_exec(char **argv, t_env *env)
 		return (127);
 	env_arr = list_to_array(env, 0);
 	len = env_array_len(env_arr);
-	if (execve(path, argv, env_arr) == -1)
+	if (execve(path, argv, env_arr))
 	{
 		free(path);
 		free_array(len, env_arr);
-		return (errno);
+		ppx_error(errno);
 	}
 	free_array(len, env_arr);
 	return (SUCCESS);
+}
+
+void	ppx_child(t_ast *ast, t_env *env, int *ret)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		ppx_error(EXIT_FAILURE);
+	if (pid == 0)
+	{
+		*ret = ppx_cmd_exec(ast->argv, env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+		waitpid(pid, NULL, 0);
 }
