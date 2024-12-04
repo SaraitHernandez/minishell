@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 11:53:31 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:51:39 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
-	int					quoted;
+	int					quoted; // 0: No quotes, 1: Single quotes, 2: Double quotes
 	struct s_token		*next;
 }	t_token;
 
@@ -144,7 +144,7 @@ t_token		*lexer(char *input);
 int			is_operator(char c);
 int			is_quote(char c);
 int			is_whitespace(char c);
-char		*handle_quote(char *input, int *index, int *quote_flag);
+int		handle_quote(char *input, int *index, char **value, int *quote_flag);
 void		set_token(t_token *token, int type, const char *value, int *index);
 
 /* expand_variables.c */

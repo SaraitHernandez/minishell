@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 11:52:36 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:50:43 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void	shell_loop(t_shell	*shell)
 		if (check_interrupt(input))
 			continue ;
 		tokens = lexer(input);
+		if (!tokens)
+		{
+			free(input);
+            continue ;
+		}
 		expand_tokens(tokens, shell);
 		ast = parse_tokens(tokens);
 		if (check_ast_null(input, tokens, ast))

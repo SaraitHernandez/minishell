@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:29:28 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 08:09:54 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:52:08 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 	{
 		if (current->type == TOKEN_WORD)
 		{
-			expanded_value = expand_variable(current->value, shell);
-			free(current->value);
-			current->value = expanded_value;
+			if (current->quoted != 1)
+			{
+				expanded_value = expand_variable(current->value, shell);
+                free(current->value);
+                current->value = expanded_value;
+			}
 		}
 		current = current->next;
 	}

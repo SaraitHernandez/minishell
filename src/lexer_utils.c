@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:54:36 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 11:55:58 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:51:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,31 @@ void	set_token(t_token *token, int type, const char *value, int *index)
 		(*index)++;
 }
 
-char	*handle_quote(char *input, int *index, int *quote_flag)
+int	handle_quote(char *input, int *index,  char **value, int *quote_flag)
 {
 	char	quote;
 	int		start;
-	char	*value;
 
 	quote = input[*index];
 	(*index)++;
 	start = *index;
-	value = NULL;
 	while (input[*index] && input[*index] != quote)
 		(*index)++;
 	if (input[*index] == quote)
 	{
-		value = ft_strndup(&input[start], *index - start);
+		*value = ft_strndup(&input[start], *index - start);
+		if (!*value)
+			exit_with_error("Memory allocation failed");
 		(*index)++;
+		if (quote == '\'')
+			*quote_flag = 1;
+		else
+			*quote_flag = 2;
+		return (0);
 	}
 	else
 	{
-		free(value);
-		exit_with_error("Syntax Error: Unmatched quote");
+		display_error("Syntax Error: Unmatched quote");
+		return (-1);
 	}
-	*quote_flag = 1;
-	return (value);
 }

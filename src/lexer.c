@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:36:40 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 11:48:36 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:49:23 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,28 @@ void	handle_operator(t_token *token, char *input, int *index)
 	}
 }
 
-void	handle_word(t_token *token, char *input, int *index)
+int	handle_word(t_token *token, char *input, int *index)
 {
 	int		start;
 	int		quote;
 	char	*value;
 	char	*part;
+	int		ret;
 
 	start = *index;
 	quote = 0;
 	value = ft_strdup("");
+	part = NULL;
 	while (input[*index] && !is_whitespace(input[*index]) && !is_operator(input[*index]))
 	{
 		if (is_quote(input[*index]))
 		{
-			part = handle_quote(input, index, &quote);
+			ret = handle_quote(input, index, &part, &quote);
+			if (ret == -1)
+			{
+				free(value);
+				return -1;
+			}
 			value = ft_strjoin_free(value, part);
 			free(part);
 		}
@@ -70,11 +77,13 @@ void	handle_word(t_token *token, char *input, int *index)
 	token->value = value;
 	if (!token->value)
 		free_all(2, FREE_TOKEN, token, ERROR_MSG, "Memory allocation failed");
+	return (0);
 }
 
 t_token	*tokenize(char *input, int *index)
 {
 	t_token	*token;
+	int ret;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
@@ -91,7 +100,14 @@ t_token	*tokenize(char *input, int *index)
 	if (is_operator(input[*index]))
 		handle_operator(token, input, index);
 	else
-		handle_word(token, input, index);
+	{
+		ret = handle_word(token, input, index);
+        if (ret == -1)
+		{
+			free(token);
+            return (NULL);
+		}
+	}
 	return (token);
 }
 
@@ -108,6 +124,11 @@ t_token	*lexer(char *input)
 	while (1)
 	{
 		new_token = tokenize(input, &index);
+		if(!new_token)
+		{
+			free_tokens(head);
+			return (NULL);
+		}
 		if (!head)
 		{
 			head = new_token;
