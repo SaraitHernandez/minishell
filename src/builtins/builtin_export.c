@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:16:34 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/28 00:59:03 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 02:11:02 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	bin_export(char **args, t_env *env)
 {
 	int		i;
 	int		error_ret;
-	int 	ret;
+	int		ret;
 	t_env	*new_node;
 
 	i = 1;

@@ -6,13 +6,13 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 01:49:36 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 02:13:19 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_builtin(char *cmd)
+int	is_builtin(char *cmd)
 {
 	if (ft_strcmp(cmd, "pwd") == 0)
 		return (1);
@@ -29,7 +29,7 @@ int		is_builtin(char *cmd)
 	return (0);
 }
 
-void		exec_builtin(char **args, t_env *env, int *ret)
+void	exec_builtin(char **args, t_env *env, int *ret)
 {
 	*ret = 0;
 	if (ft_strcmp(args[0], "pwd") == 0)
