@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 13:51:39 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:57:57 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,12 @@ typedef enum e_token_type
 }	t_token_type;
 
 /* Struct for Tokens */
+// 0: No quotes, 1: Single quotes, 2: Double quotes
 typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
-	int					quoted; // 0: No quotes, 1: Single quotes, 2: Double quotes
+	int					quoted;
 	struct s_token		*next;
 }	t_token;
 
@@ -115,9 +116,9 @@ typedef enum e_free_type
 /* Struct for Shell State */
 typedef struct s_shell
 {
-    t_env   *env_list;
-    int     exit_status;
-}   t_shell;
+	t_env	*env_list;
+	int		exit_status;
+}	t_shell;
 
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
@@ -144,8 +145,11 @@ t_token		*lexer(char *input);
 int			is_operator(char c);
 int			is_quote(char c);
 int			is_whitespace(char c);
-int		handle_quote(char *input, int *index, char **value, int *quote_flag);
+int			handle_quote(char *input, int *index, char **value,
+				int *quote_flag);
 void		set_token(t_token *token, int type, const char *value, int *index);
+t_token		*tokenize(char *input, int *index);
+int			handle_word(t_token *token, char *input, int *index);
 
 /* expand_variables.c */
 void		expand_tokens(t_token *tokens, t_shell *shell);
@@ -154,6 +158,7 @@ char		*expand_variable(char *str, t_shell *shell);
 /* heredoc and utils.c */
 int			handle_heredoc_interrupt(int fd);
 int			process_heredocs(t_ast *cmd, t_shell *shell);
+int			handle_single_heredoc(t_red *redir, t_shell *shell);
 
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);

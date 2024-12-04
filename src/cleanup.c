@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:37:57 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 11:43:48 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:21:18 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	free_tokens(t_token *tokens)
 
 void	free_redirections(t_red *redir)
 {
-	t_red *temp;
+	t_red	*temp;
+
 	while (redir)
 	{
 		temp = redir;

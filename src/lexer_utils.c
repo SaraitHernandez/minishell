@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:54:36 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 13:51:47 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:06:01 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	set_token(t_token *token, int type, const char *value, int *index)
 		(*index)++;
 }
 
-int	handle_quote(char *input, int *index,  char **value, int *quote_flag)
+int	handle_quote(char *input, int *index, char **value, int *quote_flag)
 {
 	char	quote;
 	int		start;
