@@ -5,32 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/09 19:16:50 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/03/13 23:21:41 by akacprzy         ###   ########.fr       */
+/*   Created: 2024/03/19 17:23:41 by sarherna          #+#    #+#             */
+/*   Updated: 2024/12/04 22:54:51 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char	*str;
-	char	*res;
+	int		i;
+	int		j;
 
-	if (!s1 || !s2)
-		return (NULL);
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	i = 0;
+	j = 0;
+	str = calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
 	if (!str)
 		return (NULL);
-	res = str;
-	while (*s1)
+	while (s1[i] != '\0')
 	{
-		*str++ = *s1++;
+		str[i] = s1[i];
+		i++;
 	}
-	while (*s2)
+	while (s2[j] != '\0')
 	{
-		*str++ = *s2++;
+		str[i + j] = s2[j];
+		j++;
 	}
-	*str = '\0';
-	return (res);
+	str[i + j] = '\0';
+	return (str);
 }

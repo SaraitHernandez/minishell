@@ -6,63 +6,43 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 21:22:40 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:55:53 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_heredoc_interrupt(int fd)
+static int	process_pipe_heredocs(t_ast *ast, t_shell *shell)
 {
-	close(fd);
-	g_signal_received = 0;
-	return (1);
-}
-
-int	handle_single_heredoc(t_red *redir)
-{
-	char	*line;
-	int		pipe_fd[2];
-
-	if (pipe(pipe_fd) == -1)
-	{
-		display_error("Failed to create pipe");
+	if (process_heredocs(ast->left, shell) != 0)
 		return (1);
-	}
-	setup_heredoc_signal_handlers();
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->filename) == 0)
-			break ;
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(pipe_fd[1]);
-	setup_signal_handlers();
-	if (g_signal_received == SIGINT)
-		return (handle_heredoc_interrupt(pipe_fd[0]));
-	redir->fd = pipe_fd[0];
+	if (process_heredocs(ast->right, shell) != 0)
+		return (1);
 	return (0);
 }
 
-int	process_heredocs(t_ast *cmd)
+int	process_heredocs(t_ast *ast, t_shell *shell)
 {
-	t_red			*redir;
-	int				status;
+	int		status;
+	t_red	*redir;
 
-	redir = cmd->redirections;
-	while (redir)
+	if (!ast)
+		return (0);
+	if (ast->type == NODE_COMMAND)
 	{
-		if (redir->type == TOKEN_HEREDOC)
+		redir = ast->redirections;
+		while (redir)
 		{
-			status = handle_single_heredoc(redir);
-			if (status != 0)
-				return (status);
+			if (redir->type == TOKEN_HEREDOC)
+			{
+				status = handle_single_heredoc(redir, shell);
+				if (status != 0)
+					return (status);
+			}
+			redir = redir->next;
 		}
-		redir = redir->next;
 	}
+	else if (ast->type == NODE_PIPE)
+		return (process_pipe_heredocs(ast, shell));
 	return (0);
 }

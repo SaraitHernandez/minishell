@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 21:52:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 21:21:42 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 07:57:37 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,21 @@ int	redirect_output(char *filename, int flags)
 	return (0);
 }
 
+static int	handle_heredoc_redirection(t_red *redirs)
+{
+	if (dup2(redirs->fd, STDIN_FILENO) == -1)
+	{
+		display_error("Failed to redirect heredoc output");
+		return (1);
+	}
+	close(redirs->fd);
+	return (0);
+}
+
 int	handle_redirection(t_red *redirs)
 {
 	if (redirs->type == TOKEN_HEREDOC)
-	{
-		if (dup2(redirs->fd, STDIN_FILENO) == -1)
-		{
-			display_error("Failed to redirect heredoc output");
-			return (1);
-		}
-		close(redirs->fd);
-		return (0);
-	}
+		handle_heredoc_redirection(redirs);
 	if (redirs->type == TOKEN_REDIRECT_IN)
 	{
 		if (redirect_input(redirs->filename) != 0)

@@ -6,19 +6,18 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 00:14:20 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:55:41 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	shell_loop(t_env *env_list, int *ret)
+void	shell_loop(t_shell	*shell)
 {
 	char	*input;
 	t_token	*tokens;
 	t_ast	*ast;
 
-	(void)env_list;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -32,28 +31,37 @@ void	shell_loop(t_env *env_list, int *ret)
 		if (check_interrupt(input))
 			continue ;
 		tokens = lexer(input);
+		if (!tokens)
+		{
+			free(input);
+            continue ;
+		}
+		expand_tokens(tokens, shell);
 		ast = parse_tokens(tokens);
 		if (check_ast_null(input, tokens, ast))
 			continue ;
-		if (process_heredocs(ast))
+		if (process_heredocs(ast, shell))
 			continue ;
 		debug_print(tokens, ast);  //removing this solves the norminette problem
 		get_ast_node(ast, env_list, ret);
+		// Here, in the executor, we need to update shell->exit_status
+        // execute_ast(ast, shell);
 		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env_list;
-	int		ret;
+	t_shell	shell;
 
 	(void)argc;
 	(void)argv;
 	setup_signal_handlers();
-	init_shell_env(envp, &env_list);
-	shell_loop(env_list, &ret);
+	shell.env_list = NULL;
+    shell.exit_status = 0;
+	init_shell_env(envp, &shell);
+	shell_loop(&shell);
 	rl_clear_history();
-	free_env_list(env_list);
-	return (ret);
+	free_env_list(shell.env_list); //-> i need to create a free shell
+	return (0);
 }
