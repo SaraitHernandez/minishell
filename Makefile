@@ -6,7 +6,7 @@
 #    By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/12/03 17:25:49 by sarherna         ###   ########.fr        #
+#    Updated: 2024/12/04 07:44:00 by sarherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ SRCS := \
 	$(SRC_DIR)/main.c \
 	$(SRC_DIR)/main_utils.c \
 	$(SRC_DIR)/init_shell.c \
-	$(SRC_DIR)/input.c \
 	$(SRC_DIR)/lexer_utils.c \
 	$(SRC_DIR)/lexer.c \
 	$(SRC_DIR)/expand_variables.c \

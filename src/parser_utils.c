@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:15:42 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/03 16:55:48 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 07:53:51 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,6 @@ int	parse_redirection_token(t_token **tokens, t_red **redirs)
 	*tokens = (*tokens)->next;
 	add_redirection(redirs, create_redirection_node(type, filename, quoted));
 	return (1);
-}
-
-t_ast	*last_left_child(t_ast *ast)
-{
-	if (!ast)
-		return (NULL);
-	while (ast->left)
-		ast = ast->left;
-	return (ast);
 }
 
 void	add_redirection(t_red **head, t_red *new_redir)

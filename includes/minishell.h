@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/03 17:27:22 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 08:10:35 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ typedef enum e_free_type
 	ERROR_MSG,
 }	t_free_type;
 
+/* Struct for Shell State */
+typedef struct s_shell
+{
+    t_env   *env_list;
+    int     exit_status;
+}   t_shell;
+
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -119,26 +126,21 @@ extern volatile sig_atomic_t	g_signal_received;
 
 /* main.c */
 int			main(int argc, char **argv, char **envp);
-void		shell_loop(t_env *env_list);
+void		shell_loop(t_shell *shell);
 
 /* main_utils.c */
 int			check_interrupt(char *input);
 int			check_ast_null(char *input, t_token *tokens, t_ast *ast);
-int			process_heredocs(t_ast *cmd, t_env *env);
 void		debug_print(t_token *tokens, t_ast *ast);
 
 /* init_shell.c */
 void		init_shell_env(char **envp, t_env **env_list);
 void		set_shell_level(t_env **env);
 
-/* input.c */
-char		*read_input(void);
-void		handle_eof(char *line);
-void		add_history_line(char *line);
-
 /* lexer.c */
 t_token		*lexer(char *input);
-t_token		*tokenize(char *input, int *index);
+
+/* lexer_utils.c */
 int			is_operator(char c);
 int			is_quote(char c);
 int			is_whitespace(char c);
@@ -146,32 +148,27 @@ void		handle_quote(char *input, int *index, t_token *token);
 void		set_token(t_token *token, int type, const char *value, int *index);
 
 /* expand_variables.c */
-void		expand_tokens(t_token *tokens, t_env *env);
-char		*expand_variable(char *str, t_env *env);
-char		*get_var_name(char *str);
+void		expand_tokens(t_token *tokens, t_shell *shell);
+char		*expand_variable(char *str, t_shell *shell);
 
-/* heredoc_utils.c */
+/* heredoc and utils.c */
 int			handle_heredoc_interrupt(int fd);
+int			process_heredocs(t_ast *cmd, t_shell *shell);
 
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens);
-t_ast		*parse_pipeline(t_token **tokens);
-t_ast		*parse_simple_command(t_token **tokens);
 
-/* parser_utils.c */
-int			is_redirection(t_token_type type);
-void		add_redirection(t_red **head, t_red *new_redir);
-t_red		*create_redirection_node(t_token_type type, char *filename,
-				int quoted);
-t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
-t_ast		*create_pipe_node(t_ast *left, t_ast *right);
-
-/* Additional Prototypes */
+/* parser_utils.c & nodes */
 void		parse_word_token(t_token **tokens, char **argv_local, int *argc);
 int			parse_redirection_token(t_token **tokens, t_red **redirs);
+void		add_redirection(t_red **head, t_red *new_redir);
+int			is_redirection(t_token_type type);
+t_red		*create_redirection_node(t_token_type type, char *filename,
+				int quoted);
 int			parse_command_elements(t_token **tokens, char **argv_local,
 				int *argc, t_red **redirs);
-t_ast		*last_left_child(t_ast *ast);
+t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
+t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 
 /* executor.c */
 void		execute_ast(t_ast *ast);
@@ -184,7 +181,7 @@ int			is_builtin(char *cmd_name);
 void		execute_builtin(t_ast *cmd, t_env *env);
 
 /* redirection.c */
-int			setup_redirections(t_red *redirs);
+int			handle_redirection(t_red *redirs);
 
 /* pipes.c */
 int			setup_pipes(int pipefd[2]);
@@ -255,13 +252,10 @@ char		*concat_content(char *existing, char *new_line);
 char		*ft_strndup(const char *s, size_t n);
 
 char		**copy_argv(char **argv_local, int argc);
-char		*ft_strjoin_free(char *s1, char *s2);
-char		*ft_strjoin_char(char *s1, char c);
-int			is_quoted(char *str);
 
 /* utils/utils_memory.c */
-void		ft_free(void *ptr);
-void		free_string_array(char **array);
+char		*ft_strjoin_free(char *s1, char *s2);
+char		*ft_strjoin_char(char *s1, char c);
 
 /* utils/utils_errors.c */
 void		display_error(char *message);
@@ -276,5 +270,4 @@ const char	*redirect_type_to_string(int redirect_type);
 void		print_ast_recursive(t_ast *ast, int depth);
 void		print_ast(t_ast *ast);
 void		print_indentation(int depth);
-void		reset_terminal_settings(void);
 #endif

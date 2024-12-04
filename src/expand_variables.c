@@ -6,13 +6,13 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:29:28 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/03 17:02:11 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 08:09:54 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_tokens(t_token *tokens, t_env *env)
+void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	t_token	*current;
 	char	*expanded_value;
@@ -22,7 +22,7 @@ void	expand_tokens(t_token *tokens, t_env *env)
 	{
 		if (current->type == TOKEN_WORD)
 		{
-			expanded_value = expand_variable(current->value, env);
+			expanded_value = expand_variable(current->value, shell);
 			free(current->value);
 			current->value = expanded_value;
 		}
@@ -42,33 +42,35 @@ char	*get_var_name(char *str)
 	return (var_name);
 }
 
-char	*handle_exit_status(char *result)
+char	*handle_exit_status(char *result, t_shell *shell)
 {
 	char	*var_value;
+	char	*new_result;
 
-	var_value = ft_itoa(1);
-	result = ft_strjoin_free(result, var_value);
+	var_value = ft_itoa(shell->exit_status);
+	new_result = ft_strjoin_free(result, var_value);
 	free(var_value);
-	return (result);
+	return (new_result);
 }
 
 char	*handle_env_variable(char *str, int *i, t_env *env, char *result)
 {
 	char	*var_name;
 	char	*var_value;
+	char	*new_result;
 
 	var_name = get_var_name(&str[*i + 1]);
 	var_value = get_env_value(var_name, env);
 	if (var_value)
-		result = ft_strjoin_free(result, var_value);
+		new_result = ft_strjoin_free(result, var_value);
 	else
-		result = ft_strjoin_free(result, "");
+		new_result = ft_strjoin_free(result, "");
 	*i += ft_strlen(var_name) + 1;
 	free(var_name);
-	return (result);
+	return (new_result);
 }
 
-char	*expand_variable(char *str, t_env *env)
+char	*expand_variable(char *str, t_shell *shell)
 {
 	int		i;
 	char	*result;
@@ -81,11 +83,11 @@ char	*expand_variable(char *str, t_env *env)
 		{
 			if (str[i + 1] == '?')
 			{
-				result = handle_exit_status(result);
+				result = handle_exit_status(result, shell);
 				i += 2;
 			}
 			else if (ft_isalnum(str[i + 1]) || str[i + 1] == '_')
-				result = handle_env_variable(str, &i, env, result);
+				result = handle_env_variable(str, &i, shell->env_list, result);
 			else
 				result = ft_strjoin_char(result, str[i++]);
 		}
