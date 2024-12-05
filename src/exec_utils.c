@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 02:26:24 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/04 23:20:13 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,16 @@ static char	*ppx_cmd_path(char *cmd, t_env *env)
 	return (0);
 }
 
-int	ppx_cmd_exec(char **argv, t_env *env)
+int	ppx_cmd_exec(char **argv, t_shell *shell)
 {
 	char	*path;
 	int		len;
 	char	**env_arr;
 
-	path = ppx_cmd_path(argv[0], env);
+	path = ppx_cmd_path(argv[0], shell->env_list);
 	if (!path)
 		return (127);
-	env_arr = list_to_array(env, 0);
+	env_arr = list_to_array(shell->env_list, 0);
 	len = env_array_len(env_arr);
 	if (execve(path, argv, env_arr))
 	{
@@ -75,7 +75,7 @@ int	ppx_cmd_exec(char **argv, t_env *env)
 	return (SUCCESS);
 }
 
-void	ppx_child(t_ast *ast, t_env *env, int *ret)
+void	ppx_child(t_ast *ast, t_shell *shell)
 {
 	pid_t	pid;
 
@@ -84,7 +84,7 @@ void	ppx_child(t_ast *ast, t_env *env, int *ret)
 		ppx_error(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		*ret = ppx_cmd_exec(ast->argv, env);
+		shell->exit_status = ppx_cmd_exec(ast->argv, shell);
 		exit(EXIT_SUCCESS);
 	}
 	else

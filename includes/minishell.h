@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 22:58:13 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 01:14:38 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ typedef struct s_shell
 {
 	t_env	*env_list;
 	int		exit_status;
+	int		do_exit;
+	int		in_pipe;
 }	t_shell;
 
 /* Global Variable for Signal Handling */
@@ -161,7 +163,7 @@ int			process_heredocs(t_ast *cmd, t_shell *shell);
 int			handle_single_heredoc(t_red *redir, t_shell *shell);
 
 /* parser.c */
-t_ast		*parse_tokens(t_token *tokens);
+t_ast		*parse_tokens(t_token *tokens, t_shell *shell);
 
 /* parser_utils.c & nodes */
 void		parse_word_token(t_token **tokens, char **argv_local, int *argc);
@@ -176,32 +178,22 @@ t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
 t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 
 /* executor.c */
-void		get_ast_node(t_ast *ast, t_env *env, int *ret);
+void		execute_ast(t_ast *ast, t_shell *shell);
 
 /* exec_utils.c */
 void		ppx_error(int errn);
-int			ppx_cmd_exec(char **argv, t_env *env);
-void		ppx_child(t_ast *ast, t_env *env, int *ret);
-
-/* exec_redirs.c */
-void		ppx_infile_protector(int *file1);
-int			ppx_fopen(char *file, char m);
-void		ppx_here_doc(t_ast *ast);
+int			ppx_cmd_exec(char **argv, t_shell *shell);
+void		ppx_child(t_ast *ast, t_shell *shell);
 
 /* exec_pipes.c */
-void		ppx_pipe(t_ast *ast, t_env *env, int *ret);
+void		ppx_pipe(t_ast *ast, t_shell *shell);
 
 /* exec_builtins.c */
 int			is_builtin(char *cmd);
-void		exec_builtin(char **args, t_env *env, int *ret);
+void		exec_builtin(char **args, t_shell *shell);
 
 /* redirection.c */
 int			handle_redirection(t_red *redirs);
-
-/* pipes.c */
-int			setup_pipes(int pipefd[2]);
-void		close_pipes(int pipefd[2]);
-void		redirect_pipes(int input_fd, int output_fd);
 
 /* signals.c */
 void		sigint_handler(int signo);
@@ -226,7 +218,7 @@ int			bin_cd(char **argv, t_env *env);
 int			bin_pwd(void);
 
 /* builtins/builtin_export.c */
-int			bin_export(char **argv, t_env *env);
+void		bin_export(char **args, t_shell *shell);
 void		add_env_variable(char *assignment, t_env *env);
 
 /* builtins/builtin_unset.c */
@@ -237,7 +229,7 @@ void		remove_env_variable(char *var_name, t_env *env);
 int			bin_env(t_env *env);
 
 /* builtins/builtin_exit.c */
-int			bin_exit(char **argv);
+void		bin_exit(char **args, t_shell *shell);
 
 /* environment/environment.c */
 t_env		*copy_environment(char **envp);

@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 16:48:26 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 22:55:21 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 00:05:38 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,5 @@ int		ft_isalnum(int c);
 int		ft_isdigit(int c);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(const char *s1, const char *s2);
+int		ft_strisnum(const char *str);
 #endif

@@ -60,4 +60,5 @@ dkms.conf
 # Notes
 notes
 subject
-pipex
+backups
+debug

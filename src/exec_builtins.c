@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 02:13:19 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 01:08:55 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,25 @@ int	is_builtin(char *cmd)
 		return (1);
 	if (ft_strcmp(cmd, "unset") == 0)
 		return (1);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (1);
 	return (0);
 }
 
-void	exec_builtin(char **args, t_env *env, int *ret)
+void	exec_builtin(char **args, t_shell *shell)
 {
-	*ret = 0;
 	if (ft_strcmp(args[0], "pwd") == 0)
-		*ret = bin_pwd();
+		shell->exit_status = bin_pwd();
 	if (ft_strcmp(args[0], "cd") == 0)
-		*ret = bin_cd(args, env);
+		shell->exit_status = bin_cd(args, shell->env_list);
 	if (ft_strcmp(args[0], "echo") == 0)
-		*ret = bin_echo(args);
+		shell->exit_status = bin_echo(args);
 	if (ft_strcmp(args[0], "env") == 0)
-		*ret = bin_env(env);
+		shell->exit_status = bin_env(shell->env_list);
 	if (ft_strcmp(args[0], "export") == 0)
-		*ret = bin_export(args, env);
+		bin_export(args, shell);
 	if (ft_strcmp(args[0], "unset") == 0)
-		*ret = bin_unset(args, env);
+		shell->exit_status = bin_unset(args, shell->env_list);
+	if (ft_strcmp(args[0], "exit") == 0)
+		bin_exit(args, shell);
 }

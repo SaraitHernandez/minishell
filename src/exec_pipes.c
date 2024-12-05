@@ -6,17 +6,18 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 02:20:39 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 01:02:47 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 00:04:52 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ppx_pipe(t_ast *ast, t_env *env, int *ret)
+void	ppx_pipe(t_ast *ast, t_shell *shell)
 {
 	int		fd[2];
 	pid_t	pid;
 
+	shell->in_pipe = 1;
 	if (pipe(fd) == -1)
 		ppx_error(EXIT_FAILURE);
 	pid = fork();
@@ -27,7 +28,7 @@ void	ppx_pipe(t_ast *ast, t_env *env, int *ret)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		get_ast_node(ast->left, env, ret);
+		execute_ast(ast->left, shell);
 		exit(EXIT_SUCCESS);
 	}
 	else
@@ -35,7 +36,7 @@ void	ppx_pipe(t_ast *ast, t_env *env, int *ret)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
-		get_ast_node(ast->right, env, ret);
+		execute_ast(ast->right, shell);
 		waitpid(pid, NULL, 0);
 	}
 }
