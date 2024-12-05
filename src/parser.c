@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:47:00 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 07:51:21 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/05 00:37:00 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,11 @@ t_ast	*parse_pipeline(t_token **tokens)
 	return (left);
 }
 
-t_ast	*parse_tokens(t_token *tokens)
+t_ast	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_ast	*ast;
 
+	shell->in_pipe = 0;
 	ast = parse_pipeline(&tokens);
 	return (ast);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 17:23:41 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/02 23:15:22 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:54:51 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

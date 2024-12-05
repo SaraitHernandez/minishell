@@ -1,19 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   enviroment_variables.c                             :+:      :+:    :+:   */
+/*   ft_strisnum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 16:34:55 by sarherna          #+#    #+#             */
-/*   Updated: 2024/11/24 22:20:31 by akacprzy         ###   ########.fr       */
+/*   Created: 2024/12/04 23:57:34 by akacprzy          #+#    #+#             */
+/*   Updated: 2024/12/04 23:57:44 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	ensure_path_variable(t_env *env)
+int	ft_strisnum(const char *str)
 {
-	if (!get_env_value("PATH", env))
-		set_env_value("PATH", "/usr/bin:/bin", &env);
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (0);
+	if (str[0] == '-')
+		i++;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:16:34 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/11/28 00:59:03 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 01:11:49 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,21 @@ static int	print_export_error(int err_no, char *arg)
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FD);
 		ft_putstr_fd(arg, STDERR_FD);
-		ft_putendl_fd("\': not a valid identifier: ", STDERR_FD);
+		ft_putendl_fd("\': not a valid identifier", STDERR_FD);
 	}
 	return (ERROR);
 }
 
-int	bin_export(char **args, t_env *env)
+void	bin_export(char **args, t_shell *shell)
 {
 	int		i;
 	int		error_ret;
-	int 	ret;
 	t_env	*new_node;
 
 	i = 1;
-	ret = SUCCESS;
+	shell->exit_status = 0;
 	if (!args[1])
-		env_export_print(env);
+		env_export_print(shell->env_list);
 	else
 	{
 		while (args[i])
@@ -60,14 +59,13 @@ int	bin_export(char **args, t_env *env)
 			if (args[i][0] == '=')
 				error_ret = -3;
 			if (error_ret <= 0)
-				ret = print_export_error(error_ret, args[i]);
+				shell->exit_status = print_export_error(error_ret, args[i]);
 			else
 			{
 				new_node = parse_env_var(args[i]);
-				add_env_node(&env, new_node);
+				add_env_node(&(shell->env_list), new_node);
 			}
 			i++;
 		}
 	}
-	return (ret);
 }
