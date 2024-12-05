@@ -24,6 +24,7 @@ Heredoc not working with pipes, e.g. cat -e << milk | sort -r
 
 It's hard to check leaks due to readline leaks. Check if there is a way to supress them.
 Solution: https://stackoverflow.com/questions/72840015/blocking-certain-functions-while-checking-leaks-with-valgrind
+Command: valgrind --leak-check=full --show-leak-kinds=all --suppressions=debug/readline.supp ./minishell
 
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
