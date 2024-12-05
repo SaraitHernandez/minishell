@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 14:55:53 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:44:03 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,48 @@ int	process_heredocs(t_ast *ast, t_shell *shell)
 	else if (ast->type == NODE_PIPE)
 		return (process_pipe_heredocs(ast, shell));
 	return (0);
+}
+
+static int	process_line(char **line, t_red *redir, t_shell *shell, int expand)
+{
+	char	*expanded_line;
+
+	if (!(*line))
+		return (0);
+	if (ft_strcmp(*line, redir->filename) == 0)
+	{
+		free(*line);
+		return (0);
+	}
+	if (expand)
+	{
+		expanded_line = expand_variable(*line, shell);
+		free(*line);
+		*line = expanded_line;
+	}
+	return (1);
+}
+
+static void	read_and_write_lines(t_red *redir, t_shell *shell, int write_fd)
+{
+	char	*line;
+	int		expand;
+
+	expand = !redir->quoted;
+	while (1)
+	{
+		line = readline("> ");
+		if (!process_line(&line, redir, shell, expand))
+			break ;
+		write(write_fd, line, ft_strlen(line));
+		write(write_fd, "\n", 1);
+		free(line);
+	}
+}
+
+void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
+{
+	read_and_write_lines(redir, shell, write_fd);
+	close(write_fd);
+	exit(EXIT_SUCCESS);
 }

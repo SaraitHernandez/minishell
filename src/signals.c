@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 17:54:30 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:38:58 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ volatile sig_atomic_t	g_signal_received = 0;
 
 void	sigint_handler(int signo)
 {
-    (void)signo;
-    write(STDOUT_FILENO, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
-    g_signal_received = SIGINT;
+	(void)signo;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_signal_received = SIGINT;
 }
 
 void	sigquit_handler(int signo)
@@ -52,10 +52,4 @@ void	setup_signal_handlers(void)
 	sa_quit.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
-}
-
-void	setup_heredoc_signal_handlers(void)
-{
-	signal(SIGINT, heredoc_sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
 }
