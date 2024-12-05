@@ -1,0 +1,70 @@
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+Old bugs:
+
+Some of these bugs may be already fixed. To be tested and checked.
+We can remove from this file what was already fixed until it's empty.
+---------------------------------------------------------------------------------------
+enviroment_variables.c file has incorrect name
+utils_errors.c -> contain forbidden function fprintf
+
+Check if following is needed:
+expand ~ as HOME
+
+Following command doesn't get debug printed, like it doesn't allow input redirection at the beginning of line
+< notes/bugs.txt cat -e
+<notes/bugs.txt cat -e
+
+Heredoc doesn't work when space after <<
+Heredoc should provide content as separate arguments, currently it's a string with arguments separated by space
+
+In lexer_utils.c -> set_tokens -> token->value = strdup(value); -> forbidden function
+
+Heredoc not working with pipes, e.g. cat -e << milk | sort -r
+
+It's hard to check leaks due to readline leaks. Check if there is a way to supress them.
+Solution: https://stackoverflow.com/questions/72840015/blocking-certain-functions-while-checking-leaks-with-valgrind
+
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+New bugs:
+---------------------------------------------------------------------------------------
+example 1: probably debug_print is the cause
+minishell$ << xxx cat -e | sort -r | cat
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> xxx
+Tokens:
+
+TOKEN_HEREDOC, value: <<
+UNKNOWN_TOKEN, value: (null)
+
+AST Structure:
+
+Pipe Node:
+    Left:
+        Pipe Node:
+            Left:
+                Command Node:
+                    argv: ["cat", "-e"]
+                    redirections:
+                        { type: TOKEN_HEREDOC, filename: "xxx" }
+Segmentation fault (core dumped)
+
+---------------------------------------------------------------------------------------
+example 2: probably debug_print is the cause
+minishell$ << milk cat -e | sort -r | cat > aaa.txt
+> 1
+> 2
+> 3
+> 4
+> 5
+> milk
+Tokens:
+
+TOKEN_HEREDOC, value: <<
+Segmentation fault (core dumped)

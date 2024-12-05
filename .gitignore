@@ -61,4 +61,4 @@ dkms.conf
 notes
 subject
 backups
-debug
+debug/leaks.txt
