@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 01:25:42 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:55:38 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	shell_loop(t_shell	*shell)
 			continue ;
 		if (process_heredocs(ast, shell))
 			continue ;
-		// debug_print(tokens, ast);  //removing it solves norminette problem
-		execute_ast(ast, shell);
+		debug_print(tokens, ast);  //removing it solves norminette problem
+		//execute_ast(ast, shell);
 		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
 	}
 }

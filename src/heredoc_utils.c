@@ -5,70 +5,83 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 17:10:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 15:02:12 by sarherna         ###   ########.fr       */
+/*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
+/*   Updated: 2024/12/05 18:37:34 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_heredoc_interrupt(int fd)
+static void	setup_heredoc_signal_handlers(struct sigaction *sa_old)
 {
-	close(fd);
-	g_signal_received = 0;
-	return (1);
+	struct sigaction	sa_ignore;
+
+	sigaction(SIGINT, NULL, sa_old);
+	sa_ignore.sa_handler = SIG_IGN;
+	sigemptyset(&sa_ignore.sa_mask);
+	sa_ignore.sa_flags = 0;
+	sigaction(SIGINT, &sa_ignore, NULL);
 }
 
-static void	write_line_to_pipe(char *line, int *pipe_fd)
+static int	fork_error(int *pipe_fd, struct sigaction *sa_old)
 {
-	write(pipe_fd[1], line, ft_strlen(line));
-	write(pipe_fd[1], "\n", 1);
-}
-
-static char	*process_line(char *line, t_shell *shell, int expand)
-{
-	char	*expanded_line;
-
-	if (expand)
-	{
-		expanded_line = expand_variable(line, shell);
-		free(line);
-		return (expanded_line);
-	}
-	return (line);
-}
-
-static int	handle_heredoc_reading(t_red *redir, t_shell *shell,
-			int *pipe_fd, int expand)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->filename) == 0)
-			break ;
-		line = process_line(line, shell, expand);
-		write_line_to_pipe(line, pipe_fd);
-		free(line);
-	}
-	free(line);
+	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	return (g_signal_received == SIGINT);
+	sigaction(SIGINT, sa_old, NULL);
+	return (display_error("Failed to fork for heredoc"), 1);
+}
+
+static void	heredoc_child_process(t_red *redir, t_shell *shell,
+				int *pipe_fd, struct sigaction *sa_old)
+{
+	sigaction(SIGINT, sa_old, NULL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	close(pipe_fd[0]);
+	handle_heredoc_child(redir, shell, pipe_fd[1]);
+	exit(EXIT_SUCCESS);
+}
+
+static int	heredoc_parent_process(pid_t pid, int *pipe_fd,
+				struct sigaction *sa_old, t_red *redir)
+{
+	int	wstatus;
+
+	close(pipe_fd[1]);
+	waitpid(pid, &wstatus, 0);
+	sigaction(SIGINT, sa_old, NULL);
+	if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGINT)
+	{
+		close(pipe_fd[0]);
+		return (1);
+	}
+	else if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
+	{
+		close(pipe_fd[0]);
+		return (1);
+	}
+	redir->fd = pipe_fd[0];
+	return (0);
 }
 
 int	handle_single_heredoc(t_red *redir, t_shell *shell)
 {
-	int		pipe_fd[2];
-	int		expand;
+	int					pipe_fd[2];
+	pid_t				pid;
+	struct sigaction	sa_old;
 
 	if (pipe(pipe_fd) == -1)
 		return (display_error("Failed to create pipe"), 1);
-	expand = !redir->quoted;
-	setup_heredoc_signal_handlers();
-	if (handle_heredoc_reading(redir, shell, pipe_fd, expand))
-		return (handle_heredoc_interrupt(pipe_fd[0]));
-	setup_signal_handlers();
-	redir->fd = pipe_fd[0];
+	setup_heredoc_signal_handlers(&sa_old);
+	pid = fork();
+	if (pid == -1)
+		return (fork_error(pipe_fd, &sa_old));
+	else if (pid == 0)
+		heredoc_child_process(redir, shell, pipe_fd, &sa_old);
+	else
+	{
+		if (heredoc_parent_process(pid, pipe_fd, &sa_old, redir))
+			return (1);
+	}
 	return (0);
 }
