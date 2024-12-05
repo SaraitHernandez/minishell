@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:10:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 15:02:12 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:53:05 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,59 +16,114 @@ int	handle_heredoc_interrupt(int fd)
 {
 	close(fd);
 	g_signal_received = 0;
-	return (1);
+	exit(EXIT_FAILURE);
 }
 
-static void	write_line_to_pipe(char *line, int *pipe_fd)
+void handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
 {
-	write(pipe_fd[1], line, ft_strlen(line));
-	write(pipe_fd[1], "\n", 1);
+    char *line;
+    int expand;
+
+    // Set default signal handlers
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+
+    expand = !redir->quoted;
+
+    while (1)
+    {
+        line = readline("> ");
+        if (!line)
+        {
+            // EOF or read error
+            break;
+        }
+        if (ft_strcmp(line, redir->filename) == 0)
+        {
+            free(line);
+            break;
+        }
+        if (expand)
+        {
+            char *expanded_line = expand_variable(line, shell);
+            free(line);
+            line = expanded_line;
+        }
+        write(write_fd, line, ft_strlen(line));
+        write(write_fd, "\n", 1);
+        free(line);
+    }
+    close(write_fd);
 }
 
-static char	*process_line(char *line, t_shell *shell, int expand)
+
+#include <signal.h>
+
+int handle_single_heredoc(t_red *redir, t_shell *shell)
 {
-	char	*expanded_line;
+    int pipe_fd[2];
+    pid_t pid;
+    struct sigaction sa_old, sa_ignore;
 
-	if (expand)
-	{
-		expanded_line = expand_variable(line, shell);
-		free(line);
-		return (expanded_line);
-	}
-	return (line);
-}
+    if (pipe(pipe_fd) == -1)
+        return (display_error("Failed to create pipe"), 1);
 
-static int	handle_heredoc_reading(t_red *redir, t_shell *shell,
-			int *pipe_fd, int expand)
-{
-	char	*line;
+    // Save old SIGINT handler and set to SIG_IGN
+    sigaction(SIGINT, NULL, &sa_old);
+    sa_ignore.sa_handler = SIG_IGN;
+    sigemptyset(&sa_ignore.sa_mask);
+    sa_ignore.sa_flags = 0;
+    sigaction(SIGINT, &sa_ignore, NULL);
 
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->filename) == 0)
-			break ;
-		line = process_line(line, shell, expand);
-		write_line_to_pipe(line, pipe_fd);
-		free(line);
-	}
-	free(line);
-	close(pipe_fd[1]);
-	return (g_signal_received == SIGINT);
-}
+    pid = fork();
+    if (pid == -1)
+    {
+        close(pipe_fd[0]);
+        close(pipe_fd[1]);
+        // Restore old SIGINT handler before returning
+        sigaction(SIGINT, &sa_old, NULL);
+        return (display_error("Failed to fork for heredoc"), 1);
+    }
+    else if (pid == 0)
+    {
+        // Child process
+        // Restore old SIGINT handler in child
+        sigaction(SIGINT, &sa_old, NULL);
+        // Set default signal handlers in child
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
 
-int	handle_single_heredoc(t_red *redir, t_shell *shell)
-{
-	int		pipe_fd[2];
-	int		expand;
+        close(pipe_fd[0]); // Close read end in child
+        handle_heredoc_child(redir, shell, pipe_fd[1]);
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        // Parent process
+        int wstatus;
 
-	if (pipe(pipe_fd) == -1)
-		return (display_error("Failed to create pipe"), 1);
-	expand = !redir->quoted;
-	setup_heredoc_signal_handlers();
-	if (handle_heredoc_reading(redir, shell, pipe_fd, expand))
-		return (handle_heredoc_interrupt(pipe_fd[0]));
-	setup_signal_handlers();
-	redir->fd = pipe_fd[0];
-	return (0);
+        close(pipe_fd[1]); // Close write end in parent
+
+        // Wait for child process
+        waitpid(pid, &wstatus, 0);
+
+        // Restore old SIGINT handler in parent
+        sigaction(SIGINT, &sa_old, NULL);
+
+        if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGINT)
+        {
+            // Heredoc was interrupted
+            close(pipe_fd[0]);
+            return (1);
+        }
+        else if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
+        {
+            // Child exited with error
+            close(pipe_fd[0]);
+            return (1);
+        }
+        // Success
+        redir->fd = pipe_fd[0];
+        return (0);
+    }
 }
