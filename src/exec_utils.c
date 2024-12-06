@@ -6,17 +6,11 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 23:20:13 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/06 01:47:25 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ppx_error(int errn)
-{
-	perror("pipex error "); // update error after testing minishell
-	exit(errn);
-}
 
 static void	ppx_free_lst(char **list)
 {
@@ -35,6 +29,8 @@ static char	*ppx_cmd_path(char *cmd, t_env *env)
 	char	*full_path;
 	int		i;
 
+	if (!get_env_value("PATH", env))
+		ppx_error_path(127, cmd);
 	list_path = ft_split(get_env_value("PATH", env), ':');
 	i = 0;
 	while (list_path[i])
@@ -54,7 +50,7 @@ static char	*ppx_cmd_path(char *cmd, t_env *env)
 	return (0);
 }
 
-int	ppx_cmd_exec(char **argv, t_shell *shell)
+void	ppx_cmd_exec(char **argv, t_shell *shell)
 {
 	char	*path;
 	int		len;
@@ -62,7 +58,7 @@ int	ppx_cmd_exec(char **argv, t_shell *shell)
 
 	path = ppx_cmd_path(argv[0], shell->env_list);
 	if (!path)
-		return (127);
+		ppx_error_cmd_not_found(127, argv[0]);
 	env_arr = list_to_array(shell->env_list, 0);
 	len = env_array_len(env_arr);
 	if (execve(path, argv, env_arr))
@@ -72,21 +68,26 @@ int	ppx_cmd_exec(char **argv, t_shell *shell)
 		ppx_error(errno);
 	}
 	free_array(len, env_arr);
-	return (SUCCESS);
+	exit(SUCCESS);
 }
 
 void	ppx_child(t_ast *ast, t_shell *shell)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	if (pid == -1)
 		ppx_error(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		shell->exit_status = ppx_cmd_exec(ast->argv, shell);
-		exit(EXIT_SUCCESS);
+		ppx_cmd_exec(ast->argv, shell);
+		exit(shell->exit_status);
 	}
 	else
-		waitpid(pid, NULL, 0);
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+	}
 }

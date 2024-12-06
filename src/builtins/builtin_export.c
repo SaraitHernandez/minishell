@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:16:34 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/05 01:11:49 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/05 23:08:02 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,19 @@ static int	print_export_error(int err_no, char *arg)
 	return (ERROR);
 }
 
+static void	export_arg_to_env(char *arg, t_env *env)
+{
+	t_env	*new_node;
+
+	new_node = parse_env_var(arg);
+	unset_env_value(new_node->key, env);
+	add_env_node(&env, new_node);
+}
+
 void	bin_export(char **args, t_shell *shell)
 {
 	int		i;
-	int		error_ret;
-	t_env	*new_node;
+	int		error_type;
 
 	i = 1;
 	shell->exit_status = 0;
@@ -55,15 +63,15 @@ void	bin_export(char **args, t_shell *shell)
 	{
 		while (args[i])
 		{
-			error_ret = export_validate_arg(args[i]);
+			error_type = export_validate_arg(args[i]);
 			if (args[i][0] == '=')
-				error_ret = -3;
-			if (error_ret <= 0)
-				shell->exit_status = print_export_error(error_ret, args[i]);
+				error_type = -3;
+			if (error_type <= 0)
+				shell->exit_status = print_export_error(error_type, args[i]);
 			else
 			{
-				new_node = parse_env_var(args[i]);
-				add_env_node(&(shell->env_list), new_node);
+				export_arg_to_env(args[i], shell->env_list);
+				shell->exit_status = 0;
 			}
 			i++;
 		}

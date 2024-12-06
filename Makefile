@@ -6,7 +6,7 @@
 #    By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 11:39:14 by sarherna          #+#    #+#              #
-#    Updated: 2024/12/04 23:20:31 by akacprzy         ###   ########.fr        #
+#    Updated: 2024/12/05 23:39:43 by akacprzy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS := \
 	$(SRC_DIR)/executor.c \
 	$(SRC_DIR)/exec_utils.c \
 	$(SRC_DIR)/exec_pipes.c \
+	$(SRC_DIR)/exec_errors.c \
 	$(SRC_DIR)/exec_builtins.c \
 	$(SRC_DIR)/redirection.c \
 	$(SRC_DIR)/heredoc.c \

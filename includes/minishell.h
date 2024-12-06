@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 18:37:10 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/06 01:45:12 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,12 +181,16 @@ t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 void		execute_ast(t_ast *ast, t_shell *shell);
 
 /* exec_utils.c */
-void		ppx_error(int errn);
-int			ppx_cmd_exec(char **argv, t_shell *shell);
+void		ppx_cmd_exec(char **argv, t_shell *shell);
 void		ppx_child(t_ast *ast, t_shell *shell);
 
 /* exec_pipes.c */
 void		ppx_pipe(t_ast *ast, t_shell *shell);
+
+/* exec_errors.c */
+void		ppx_error(int errn);
+void		ppx_error_path(int errn, char *cmd);
+void		ppx_error_cmd_not_found(int errn, char *cmd);
 
 /* exec_builtins.c */
 int			is_builtin(char *cmd);
