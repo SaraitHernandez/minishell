@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/06 01:38:18 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/06 02:51:56 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,15 @@ void	shell_loop(t_shell	*shell)
 		if (process_heredocs(ast, shell))
 			continue ;
 		// debug_print(tokens, ast);  //removing it solves norminette problem
+		/* 	We need to free unnecessary memory before executing commands
+			because each child process needs to have its memory freed
+			If we don't free child memory then it causes leaks 
+			As heredoc currently also uses processes then it has also to free memory in child process 
+			-> to be checked / done / tested
+		*/
+		free_all(2, FREE_STRING, input, FREE_TOKEN, tokens);
 		execute_ast(ast, shell);
-		free_all(3, FREE_STRING, input, FREE_TOKEN, tokens, FREE_AST, ast);
+		free_all(1, FREE_AST, ast);
 	}
 }
 
