@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/07 16:03:36 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:33:40 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	sigint_handler(int signo)
 	rl_on_new_line();
 	rl_redisplay();
 	g_signal_received = SIGINT;
+	rl_done = 1;
 }
 
 void	sigquit_handler(int signo)
