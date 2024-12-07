@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/06 03:47:55 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:14:15 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ static void	ppx_free_lst(char **list)
 	while (list[i])
 		free(list[i++]);
 	free(list);
+}
+
+static char	*ppx_command_abs_path(t_ast *ast)
+{
+	if (access(ast->argv[0], X_OK) == 0)
+		return (ast->argv[0]);
+	return (NULL);
 }
 
 static char	*ppx_cmd_path(t_ast *ast, t_env *env)
@@ -56,7 +63,9 @@ void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
 	int		len;
 	char	**env_arr;
 
-	path = ppx_cmd_path(ast, shell->env_list);
+	path = 	ppx_command_abs_path(ast);
+	if (!path)
+		path = ppx_cmd_path(ast, shell->env_list);
 	if (!path)
 		ppx_error_cmd_not_found(127, ast, shell->env_list);
 	env_arr = list_to_array(shell->env_list, 0);
@@ -65,10 +74,11 @@ void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
 	{
 		free(path);
 		free_array(len, env_arr);
+		shell->exit_status = errno;
 		ppx_error(errno);
 	}
 	free_array(len, env_arr);
-	exit(SUCCESS);
+	shell->exit_status = SUCCESS;
 }
 
 void	ppx_child(t_ast *ast, t_shell *shell)
@@ -82,6 +92,8 @@ void	ppx_child(t_ast *ast, t_shell *shell)
 	if (pid == 0)
 	{
 		ppx_cmd_exec(ast, shell);
+		free_env_list(shell->env_list);
+		free_ast(ast);
 		exit(shell->exit_status);
 	}
 	else
