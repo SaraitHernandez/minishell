@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/07 16:10:53 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:44:09 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,12 @@
 static void	setup_heredoc_signal_handlers(struct sigaction *sa_old)
 {
 	struct sigaction	sa_ignore;
-	struct sigaction	sa_quit;
 
 	sigaction(SIGINT, NULL, sa_old);
 	sa_ignore.sa_handler = SIG_IGN;
 	sigemptyset(&sa_ignore.sa_mask);
 	sa_ignore.sa_flags = 0;
 	sigaction(SIGINT, &sa_ignore, NULL);
-	sa_quit.sa_handler = SIG_IGN;
-	sa_quit.sa_flags = 0;
-	sigemptyset(&sa_quit.sa_mask);
-	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
 static int	fork_error(int *pipe_fd, struct sigaction *sa_old)
@@ -41,7 +36,7 @@ static void	heredoc_child_process(t_red *redir, t_shell *shell,
 {
 	sigaction(SIGINT, sa_old, NULL);
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	close(pipe_fd[0]);
 	handle_heredoc_child(redir, shell, pipe_fd[1]);
 	exit(EXIT_SUCCESS);
