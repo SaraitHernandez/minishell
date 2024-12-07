@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 18:37:34 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:10:53 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 static void	setup_heredoc_signal_handlers(struct sigaction *sa_old)
 {
 	struct sigaction	sa_ignore;
+	struct sigaction	sa_quit;
 
 	sigaction(SIGINT, NULL, sa_old);
 	sa_ignore.sa_handler = SIG_IGN;
 	sigemptyset(&sa_ignore.sa_mask);
 	sa_ignore.sa_flags = 0;
 	sigaction(SIGINT, &sa_ignore, NULL);
+	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_flags = 0;
+	sigemptyset(&sa_quit.sa_mask);
+	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
 static int	fork_error(int *pipe_fd, struct sigaction *sa_old)

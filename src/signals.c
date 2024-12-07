@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 18:38:58 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:03:36 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	sigint_handler(int signo)
 void	sigquit_handler(int signo)
 {
 	(void)signo;
+	return ;
 }
 
 void	heredoc_sigint_handler(int signo)
@@ -45,11 +46,11 @@ void	setup_signal_handlers(void)
 	ft_memset(&sa_int, 0, sizeof(sa_int));
 	ft_memset(&sa_quit, 0, sizeof(sa_quit));
 	sa_int.sa_handler = sigint_handler;
-	sa_quit.sa_handler = sigquit_handler;
 	sigemptyset(&sa_int.sa_mask);
-	sigemptyset(&sa_quit.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_quit.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
+	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_flags = 0;
+	sigemptyset(&sa_quit.sa_mask);
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
