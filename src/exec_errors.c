@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exec_errors.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/06 03:19:39 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:20:31 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ppx_error(int errn)
+void	ppx_error(int errn, t_ast *ast, t_env *env)
 {
 	perror("minishell");
+	free_all(1, FREE_AST, ast);
+	free_env_list(env);
 	exit(errn);
 }
 

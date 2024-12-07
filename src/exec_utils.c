@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/07 16:14:15 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:37:46 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,9 @@ void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
 	len = env_array_len(env_arr);
 	if (execve(path, ast->argv, env_arr))
 	{
-		free(path);
 		free_array(len, env_arr);
 		shell->exit_status = errno;
-		ppx_error(errno);
+		ppx_error(errno, ast, shell->env_list);
 	}
 	free_array(len, env_arr);
 	shell->exit_status = SUCCESS;
@@ -88,7 +87,7 @@ void	ppx_child(t_ast *ast, t_shell *shell)
 
 	pid = fork();
 	if (pid == -1)
-		ppx_error(EXIT_FAILURE);
+		ppx_error(EXIT_FAILURE, ast, shell->env_list);
 	if (pid == 0)
 	{
 		ppx_cmd_exec(ast, shell);

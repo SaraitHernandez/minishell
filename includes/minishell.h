@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/06 03:19:19 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:14:42 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void		ppx_child(t_ast *ast, t_shell *shell);
 void		ppx_pipe(t_ast *ast, t_shell *shell);
 
 /* exec_errors.c */
-void		ppx_error(int errn);
+void		ppx_error(int errn, t_ast *ast, t_env *env);
 void		ppx_error_path(int errn, t_ast *ast, t_env *env);
 void		ppx_error_cmd_not_found(int errn, t_ast *ast, t_env *env);
 

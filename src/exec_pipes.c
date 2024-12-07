@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 02:20:39 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/07 16:00:48 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:15:27 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	ppx_pipe(t_ast *ast, t_shell *shell)
 
 	shell->in_pipe = 1;
 	if (pipe(fd) == -1)
-		ppx_error(EXIT_FAILURE);
+		ppx_error(EXIT_FAILURE, ast, shell->env_list);
 	pid = fork();
 	if (pid == -1)
-		ppx_error(EXIT_FAILURE);
+		ppx_error(EXIT_FAILURE, ast, shell->env_list);
 	if (pid == 0)
 	{
 		close(fd[0]);
