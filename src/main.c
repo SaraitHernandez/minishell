@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/06 02:51:56 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:05:27 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	shell_loop(t_shell	*shell)
 			-> to be checked / done / tested
 		*/
 		free_all(2, FREE_STRING, input, FREE_TOKEN, tokens);
-		execute_ast(ast, shell);
+		execute_ast(ast, shell, NULL);
 		free_all(1, FREE_AST, ast);
 	}
 }

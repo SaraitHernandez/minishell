@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/06 03:47:55 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 03:02:27 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,14 @@ static void	ppx_free_lst(char **list)
 	free(list);
 }
 
-static char	*ppx_cmd_path(t_ast *ast, t_env *env)
+static char	*ppx_command_abs_path(t_ast *ast)
+{
+	if (access(ast->argv[0], X_OK) == 0)
+		return (ast->argv[0]);
+	return (NULL);
+}
+
+static char	*ppx_cmd_path(t_ast *ast, t_env *env, t_past *past)
 {
 	char	**list_path;
 	char	*part_path;
@@ -30,7 +37,7 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env)
 	int		i;
 
 	if (!get_env_value("PATH", env))
-		ppx_error_path(127, ast, env);
+		ppx_error_path(127, ast, env, past);
 	list_path = ft_split(get_env_value("PATH", env), ':');
 	i = 0;
 	while (list_path[i])
@@ -50,15 +57,17 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env)
 	return (0);
 }
 
-void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
+void	ppx_cmd_exec(t_ast *ast, t_shell *shell, t_past *past)
 {
 	char	*path;
 	int		len;
 	char	**env_arr;
 
-	path = ppx_cmd_path(ast, shell->env_list);
+	path = 	ppx_command_abs_path(ast);
 	if (!path)
-		ppx_error_cmd_not_found(127, ast, shell->env_list);
+		path = ppx_cmd_path(ast, shell->env_list, past);
+	if (!path)
+		ppx_error_cmd_not_found(127, ast, shell->env_list, past);
 	env_arr = list_to_array(shell->env_list, 0);
 	len = env_array_len(env_arr);
 	if (execve(path, ast->argv, env_arr))
@@ -71,7 +80,7 @@ void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
 	exit(SUCCESS);
 }
 
-void	ppx_child(t_ast *ast, t_shell *shell)
+void	ppx_child(t_ast *ast, t_shell *shell, t_past *past)
 {
 	pid_t	pid;
 	int		status;
@@ -81,7 +90,12 @@ void	ppx_child(t_ast *ast, t_shell *shell)
 		ppx_error(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		ppx_cmd_exec(ast, shell);
+		ppx_cmd_exec(ast, shell, past);
+		if (!shell->in_pipe)
+		{
+			free_env_list(shell->env_list);
+			clear_past(past);
+		}
 		exit(shell->exit_status);
 	}
 	else

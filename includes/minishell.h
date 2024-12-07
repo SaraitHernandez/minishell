@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/06 03:19:19 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 02:45:25 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,13 @@ typedef struct s_shell
 	int		in_pipe;
 }	t_shell;
 
+/* Struct for Abstract Syntax Tree Nodes */
+typedef struct s_past
+{
+	struct s_ast	*ast;
+	struct s_past	*next;
+}	t_past;
+
 /* Global Variable for Signal Handling */
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -178,19 +185,22 @@ t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
 t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 
 /* executor.c */
-void		execute_ast(t_ast *ast, t_shell *shell);
+void		execute_ast(t_ast *ast, t_shell *shell, t_past *past);
 
 /* exec_utils.c */
-void		ppx_cmd_exec(t_ast *ast, t_shell *shell);
-void		ppx_child(t_ast *ast, t_shell *shell);
+void		ppx_cmd_exec(t_ast *ast, t_shell *shell, t_past *past);
+void		ppx_child(t_ast *ast, t_shell *shell, t_past *past);
 
 /* exec_pipes.c */
-void		ppx_pipe(t_ast *ast, t_shell *shell);
+void		add_past_node(t_past **past, t_ast *ast);
+void		clear_past(t_past *past);
+void		ppx_pipe(t_ast *ast, t_shell *shell, t_past *past);
 
 /* exec_errors.c */
 void		ppx_error(int errn);
-void		ppx_error_path(int errn, t_ast *ast, t_env *env);
-void		ppx_error_cmd_not_found(int errn, t_ast *ast, t_env *env);
+void		ppx_error_path(int errn, t_ast *ast, t_env *env, t_past *past);
+void		ppx_error_cmd_not_found(int errn, t_ast *ast, t_env *env,
+				t_past *past);
 
 /* exec_builtins.c */
 int			is_builtin(char *cmd);

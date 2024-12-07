@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:02:54 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/06 04:05:33 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 02:38:45 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	restore_stds(int *saved_stdin, int *saved_stdout)
 	close(*saved_stdout);
 }
 
-void	execute_ast(t_ast *ast, t_shell *shell)
+void	execute_ast(t_ast *ast, t_shell *shell, t_past *past)
 {
 	t_red	*cred;
 	int		saved_stdin;
@@ -47,10 +47,10 @@ void	execute_ast(t_ast *ast, t_shell *shell)
 		if (is_builtin(ast->argv[0]) == 1)
 			exec_builtin(ast->argv, shell);
 		else
-			ppx_child(ast, shell);
+			ppx_child(ast, shell, past);
 	}
 	else if (ast->type == NODE_PIPE)
 	// there is still leak on ast while incorrect command inside pipe
-		ppx_pipe(ast, shell);
+		ppx_pipe(ast, shell, past);
 	restore_stds(&saved_stdin, &saved_stdout);
 }
