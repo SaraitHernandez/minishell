@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:57:34 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/04 23:57:44 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:06:39 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_strisnum(const char *str)
 	i = 0;
 	if (str == NULL)
 		return (0);
-	if (str[0] == '-')
+	if (str[0] == '-' || str[0] == '+')
 		i++;
 	while (str[i])
 	{
