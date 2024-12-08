@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 16:08:55 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 19:26:54 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ static void	setup_heredoc_signal_handlers(struct sigaction *sa_old)
 	struct sigaction	sa_ignore;
 
 	sigaction(SIGINT, NULL, sa_old);
-	sa_ignore.sa_handler = SIG_IGN;
+	sa_ignore.sa_handler = SIG_DFL;
 	sigemptyset(&sa_ignore.sa_mask);
 	sa_ignore.sa_flags = 0;
 	sigaction(SIGINT, &sa_ignore, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 static int	fork_error(int *pipe_fd, struct sigaction *sa_old)
@@ -36,7 +37,6 @@ static void	heredoc_child_process(t_red *redir, t_shell *shell,
 {
 	sigaction(SIGINT, sa_old, NULL);
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 	close(pipe_fd[0]);
 	handle_heredoc_child(redir, shell, pipe_fd[1]);
 	free_env_list(shell->env_list);
@@ -50,7 +50,8 @@ static int	heredoc_parent_process(pid_t pid, int *pipe_fd,
 	int	wstatus;
 
 	close(pipe_fd[1]);
-	waitpid(pid, &wstatus, 0);
+	if (waitpid(pid, &wstatus, 0) == -1)
+		wstatus = -1;
 	sigaction(SIGINT, sa_old, NULL);
 	if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGINT)
 	{
@@ -65,6 +66,7 @@ static int	heredoc_parent_process(pid_t pid, int *pipe_fd,
 		return (1);
 	}
 	redir->fd = pipe_fd[0];
+	setup_signal_handlers();
 	return (0);
 }
 

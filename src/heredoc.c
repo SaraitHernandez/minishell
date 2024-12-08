@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 16:08:00 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 19:16:44 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	process_line(char **line, t_red *redir, t_shell *shell, int expand)
 	return (1);
 }
 
-static void	read_and_write_lines(t_red *redir, t_shell *shell, int write_fd)
+void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
 {
 	char	*line;
 	int		expand;
@@ -86,10 +86,5 @@ static void	read_and_write_lines(t_red *redir, t_shell *shell, int write_fd)
 		write(write_fd, "\n", 1);
 		free(line);
 	}
-}
-
-void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
-{
-	read_and_write_lines(redir, shell, write_fd);
 	close(write_fd);
 }
