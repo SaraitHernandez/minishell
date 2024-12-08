@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 19:16:44 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:09:12 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
 	expand = !redir->quoted;
 	while (1)
 	{
+		if (g_signal_received == SIGINT)
+		{
+
+			break ;
+		}
+            
 		line = readline("> ");
 		if (!line)
         	break ;

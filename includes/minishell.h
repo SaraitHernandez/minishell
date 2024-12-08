@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 15:05:11 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:11:49 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
+# include <sys/ioctl.h>
 # include "libft.h"
 
 /* Constants */
