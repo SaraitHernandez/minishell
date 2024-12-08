@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:02:54 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/06 04:05:33 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/08 13:38:25 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ void	execute_ast(t_ast *ast, t_shell *shell)
 		while (cred != NULL)
 		{
 			if (handle_redirection(cred) != 0)
+			{
+				shell->exit_status = 1;
+				restore_stds(&saved_stdin, &saved_stdout);
 				return ;
+			}
 			cred = cred->next;
 		}
 		if (is_builtin(ast->argv[0]) == 1)
@@ -50,7 +54,6 @@ void	execute_ast(t_ast *ast, t_shell *shell)
 			ppx_child(ast, shell);
 	}
 	else if (ast->type == NODE_PIPE)
-	// there is still leak on ast while incorrect command inside pipe
 		ppx_pipe(ast, shell);
 	restore_stds(&saved_stdin, &saved_stdout);
 }
