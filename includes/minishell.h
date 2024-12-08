@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 12:45:38 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:05:11 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,7 @@ char		*ft_strjoin_char(char *s1, char c);
 void		display_error(char *message);
 void		exit_with_error(char *message);
 void		command_not_found(char *cmd_name);
+void		redir_error(char *filename);
 
 /* tests/test_parser.c */
 const char	*token_type_to_string(t_token_type type);
