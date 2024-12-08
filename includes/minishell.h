@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/07 17:14:42 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 12:45:38 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,9 +201,7 @@ int			handle_redirection(t_red *redirs);
 
 /* signals.c */
 void		sigint_handler(int signo);
-void		sigquit_handler(int signo);
 void		setup_signal_handlers(void);
-void		heredoc_signal_handler(int signo);
 void		handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd);
 
 /* cleanup.c */

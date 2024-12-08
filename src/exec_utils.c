@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/07 17:37:46 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 12:41:32 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,32 @@ void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
 	shell->exit_status = SUCCESS;
 }
 
+static void	setup_child_signal_handlers(struct sigaction *sa_old)
+{
+	struct sigaction	sa_ignore;
+
+	sigaction(SIGINT, NULL, sa_old);
+	sa_ignore.sa_handler = SIG_IGN;
+	sigemptyset(&sa_ignore.sa_mask);
+	sa_ignore.sa_flags = 0;
+	sigaction(SIGINT, &sa_ignore, NULL);
+}
+
 void	ppx_child(t_ast *ast, t_shell *shell)
 {
-	pid_t	pid;
-	int		status;
-
+	pid_t				pid;
+	int					status;
+	struct sigaction	sa_old;
+	
+	setup_child_signal_handlers(&sa_old);
 	pid = fork();
 	if (pid == -1)
 		ppx_error(EXIT_FAILURE, ast, shell->env_list);
 	if (pid == 0)
 	{
+		sigaction(SIGINT, &sa_old, NULL);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		ppx_cmd_exec(ast, shell);
 		free_env_list(shell->env_list);
 		free_ast(ast);

@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/07 16:33:40 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 12:46:06 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,33 +25,14 @@ void	sigint_handler(int signo)
 	rl_done = 1;
 }
 
-void	sigquit_handler(int signo)
-{
-	(void)signo;
-	return ;
-}
-
-void	heredoc_sigint_handler(int signo)
-{
-	(void)signo;
-	g_signal_received = SIGINT;
-	rl_replace_line("", 0);
-	rl_done = 1;
-}
-
 void	setup_signal_handlers(void)
 {
 	struct sigaction	sa_int;
-	struct sigaction	sa_quit;
 
 	ft_memset(&sa_int, 0, sizeof(sa_int));
-	ft_memset(&sa_quit, 0, sizeof(sa_quit));
 	sa_int.sa_handler = sigint_handler;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-	sa_quit.sa_handler = SIG_IGN;
-	sa_quit.sa_flags = 0;
-	sigemptyset(&sa_quit.sa_mask);
-	sigaction(SIGQUIT, &sa_quit, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }

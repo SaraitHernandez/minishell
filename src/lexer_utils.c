@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 12:54:36 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/06 02:36:07 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:51:55 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	is_whitespace(char c)
 void	set_token(t_token *token, int type, const char *value, int *index)
 {
 	token->type = type;
-	token->value = strdup(value);//forbidden function -> change into ft_strdup ???
+	token->value = ft_strdup(value);
 	if (!token->value)
 	{
 		free(token);
