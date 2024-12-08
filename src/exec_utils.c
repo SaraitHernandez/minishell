@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/08 15:52:48 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/08 18:33:01 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static void	setup_child_signal_handlers(struct sigaction *sa_old)
 	sigemptyset(&sa_ignore.sa_mask);
 	sa_ignore.sa_flags = 0;
 	sigaction(SIGINT, &sa_ignore, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	ppx_child(t_ast *ast, t_shell *shell)
@@ -105,7 +106,6 @@ void	ppx_child(t_ast *ast, t_shell *shell)
 	{
 		sigaction(SIGINT, &sa_old, NULL);
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
 		ppx_cmd_exec(ast, shell);
 		free_env_list(shell->env_list);
 		free_ast(ast);
@@ -122,5 +122,6 @@ void	ppx_child(t_ast *ast, t_shell *shell)
 			shell->exit_status = 128 + WSTOPSIG(status);
 		else
 			shell->exit_status = status;
+		setup_signal_handlers();
 	}
 }

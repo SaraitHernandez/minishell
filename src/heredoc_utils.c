@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 16:08:55 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 18:36:16 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int	heredoc_parent_process(pid_t pid, int *pipe_fd,
 		return (1);
 	}
 	redir->fd = pipe_fd[0];
+	setup_signal_handlers();
 	return (0);
 }
 
