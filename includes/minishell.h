@@ -6,7 +6,7 @@
 /*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 12:45:38 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:08:23 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ char		*expand_variable(char *str, t_shell *shell);
 /* heredoc and utils.c */
 int			handle_heredoc_interrupt(int fd);
 int			process_heredocs(t_ast *cmd, t_shell *shell);
-int			handle_single_heredoc(t_red *redir, t_shell *shell);
+int			handle_single_heredoc(t_red *redir, t_shell *shell, t_ast *ast);
 
 /* parser.c */
 t_ast		*parse_tokens(t_token *tokens, t_shell *shell);
@@ -209,6 +209,7 @@ void		cleanup_shell(t_env *env, t_ast *ast);
 void		free_ast(t_ast *ast);
 void		free_tokens(t_token *tokens);
 void		free_all(int count, ...);
+void		free_redirections(t_red *redir);
 
 /* builtins/builtin_echo.c */
 int			bin_echo(char **argv);

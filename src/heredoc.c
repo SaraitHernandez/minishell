@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/05 18:44:03 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:08:00 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	process_heredocs(t_ast *ast, t_shell *shell)
 		{
 			if (redir->type == TOKEN_HEREDOC)
 			{
-				status = handle_single_heredoc(redir, shell);
-				if (status != 0)
+				status = handle_single_heredoc(redir, shell, ast);
+				if (status)
 					return (status);
 			}
 			redir = redir->next;
@@ -62,6 +62,8 @@ static int	process_line(char **line, t_red *redir, t_shell *shell, int expand)
 	{
 		expanded_line = expand_variable(*line, shell);
 		free(*line);
+		if (!expanded_line)
+        	return (0);
 		*line = expanded_line;
 	}
 	return (1);
@@ -76,8 +78,10 @@ static void	read_and_write_lines(t_red *redir, t_shell *shell, int write_fd)
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+        	break ;
 		if (!process_line(&line, redir, shell, expand))
-			break ;
+            break ;
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
@@ -88,5 +92,4 @@ void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
 {
 	read_and_write_lines(redir, shell, write_fd);
 	close(write_fd);
-	exit(EXIT_SUCCESS);
 }
