@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/08 12:41:32 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:52:48 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env)
 		ppx_error_path(127, ast, env);
 	list_path = ft_split(get_env_value("PATH", env), ':');
 	i = 0;
-	while (list_path[i])
+	while (list_path[i] && ast->argv[0][0] != '\0')
 	{
 		part_path = ft_strjoin(list_path[i], "/");
 		full_path = ft_strjoin(part_path, ast->argv[0]);

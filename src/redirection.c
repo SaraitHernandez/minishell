@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 21:52:46 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/04 07:57:37 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:05:07 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	redirect_input(char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
-		display_error("No such file or directory");
+		redir_error(filename);
 		return (1);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
-		display_error("Failed to redirect input");
+		redir_error(filename);
 		return (1);
 	}
 	close(fd);
@@ -38,12 +38,12 @@ int	redirect_output(char *filename, int flags)
 	fd = open(filename, O_WRONLY | O_CREAT | flags, 0644);
 	if (fd == -1)
 	{
-		display_error("Failed to open output file");
+		redir_error(filename);
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
-		display_error("Failed to redirect output");
+		redir_error(filename);
 		return (1);
 	}
 	close(fd);
@@ -54,7 +54,7 @@ static int	handle_heredoc_redirection(t_red *redirs)
 {
 	if (dup2(redirs->fd, STDIN_FILENO) == -1)
 	{
-		display_error("Failed to redirect heredoc output");
+		display_error("minishell: Failed to redirect heredoc output");
 		return (1);
 	}
 	close(redirs->fd);

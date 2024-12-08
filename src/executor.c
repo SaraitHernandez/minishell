@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:02:54 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/08 13:38:25 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:40:38 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,13 @@ void	execute_ast(t_ast *ast, t_shell *shell)
 			}
 			cred = cred->next;
 		}
-		if (is_builtin(ast->argv[0]) == 1)
-			exec_builtin(ast->argv, shell);
-		else
-			ppx_child(ast, shell);
+		if (ast->argv[0])
+		{
+			if (is_builtin(ast->argv[0]) == 1)
+				exec_builtin(ast->argv, shell);
+			else
+				ppx_child(ast, shell);
+		}
 	}
 	else if (ast->type == NODE_PIPE)
 		ppx_pipe(ast, shell);
