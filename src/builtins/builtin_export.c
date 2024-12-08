@@ -6,7 +6,7 @@
 /*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:16:34 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/05 23:08:02 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/08 17:00:12 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	export_validate_arg(const char *str)
 		return (0);
 	while (str[i] && str[i] != '=')
 	{
-		if (ft_isalnum(str[i]) == 0)
+		if (ft_isalnum(str[i]) == 0 && str[i] != '_')
 			return (-1);
 		i++;
 	}
@@ -57,7 +57,7 @@ void	bin_export(char **args, t_shell *shell)
 
 	i = 1;
 	shell->exit_status = 0;
-	if (!args[1])
+	if (!args[1] || args[1][0] == '\0')
 		env_export_print(shell->env_list);
 	else
 	{
