@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 22:11:49 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 01:53:26 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,19 +179,19 @@ t_ast		*create_command_node(char **argv_local, int argc, t_red *redirs);
 t_ast		*create_pipe_node(t_ast *left, t_ast *right);
 
 /* executor.c */
-void		execute_ast(t_ast *ast, t_shell *shell);
+void		execute_ast(t_ast *ast, t_shell *shell, t_ast *past);
 
 /* exec_utils.c */
-void		ppx_cmd_exec(t_ast *ast, t_shell *shell);
-void		ppx_child(t_ast *ast, t_shell *shell);
+void		ppx_child(t_ast *ast, t_shell *shell, t_ast *past);
 
 /* exec_pipes.c */
 void		ppx_pipe(t_ast *ast, t_shell *shell);
 
 /* exec_errors.c */
-void		ppx_error(int errn, t_ast *ast, t_env *env);
-void		ppx_error_path(int errn, t_ast *ast, t_env *env);
-void		ppx_error_cmd_not_found(int errn, t_ast *ast, t_env *env);
+void		ppx_error(int errn, t_ast *ast, t_env *env, t_ast *past);
+void		ppx_error_path(int errn, t_ast *ast, t_env *env, t_ast *past);
+void		ppx_error_cmd_not_found(int errn, t_ast *ast, t_env *env,
+				t_ast *past);
 
 /* exec_builtins.c */
 int			is_builtin(char *cmd);
