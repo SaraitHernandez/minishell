@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 12:46:06 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:46:38 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,18 @@ void	setup_signal_handlers(void)
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	heredoc_sigint_handler(int signo)
+{
+	char	c;
+
+	(void)signo;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_done = 1;
+	rl_redisplay();
+	g_signal_received = SIGINT;
+	c = '\n';
+	ioctl(STDIN_FILENO, TIOCSTI, &c);
 }

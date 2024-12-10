@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 20:04:15 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/10 01:53:26 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:46:53 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ int			handle_redirection(t_red *redirs);
 void		sigint_handler(int signo);
 void		setup_signal_handlers(void);
 void		handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd);
+void		heredoc_sigint_handler(int signo);
 
 /* cleanup.c */
 void		cleanup_shell(t_env *env, t_ast *ast);

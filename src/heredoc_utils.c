@@ -3,25 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:37:31 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 22:12:02 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:50:56 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void sigint()
-{
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_done = 1;
-	rl_redisplay();
-	g_signal_received = SIGINT;
-	char c = '\n';
-	ioctl(STDIN_FILENO, TIOCSTI, &c);
-}
 static void	setup_heredoc_signal_handlers(struct sigaction *sa_old)
 {
 	struct sigaction	sa_ignore;
@@ -42,14 +32,8 @@ static int	fork_error(int *pipe_fd, struct sigaction *sa_old)
 	return (display_error("Failed to fork for heredoc"), 1);
 }
 
-static void	heredoc_child_process(t_red *redir, t_shell *shell,
-				int *pipe_fd, struct sigaction *sa_old, t_ast *ast)
+static void	finish_heredoc_child_process(t_shell *shell, t_ast *ast)
 {
-	g_signal_received = 0;
-	sigaction(SIGINT, sa_old, NULL);
-	signal(SIGINT, sigint);
-	close(pipe_fd[0]);
-	handle_heredoc_child(redir, shell, pipe_fd[1]);
 	free_env_list(shell->env_list);
 	free_ast(ast);
 	exit(EXIT_SUCCESS);
@@ -95,7 +79,12 @@ int	handle_single_heredoc(t_red *redir, t_shell *shell, t_ast *ast)
 		return (fork_error(pipe_fd, &sa_old));
 	if (pid == 0)
 	{
-		heredoc_child_process(redir, shell, pipe_fd, &sa_old, ast);
+		g_signal_received = 0;
+		sigaction(SIGINT, &sa_old, NULL);
+		signal(SIGINT, heredoc_sigint_handler);
+		close(pipe_fd[0]);
+		handle_heredoc_child(redir, shell, pipe_fd[1]);
+		finish_heredoc_child_process(shell, ast);
 	}
 	else
 	{

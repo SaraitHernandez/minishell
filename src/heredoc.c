@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 15:38:38 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 22:09:12 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:39:47 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	process_line(char **line, t_red *redir, t_shell *shell, int expand)
 		expanded_line = expand_variable(*line, shell);
 		free(*line);
 		if (!expanded_line)
-        	return (0);
+			return (0);
 		*line = expanded_line;
 	}
 	return (1);
@@ -78,16 +78,12 @@ void	handle_heredoc_child(t_red *redir, t_shell *shell, int write_fd)
 	while (1)
 	{
 		if (g_signal_received == SIGINT)
-		{
-
 			break ;
-		}
-            
 		line = readline("> ");
 		if (!line)
-        	break ;
+			break ;
 		if (!process_line(&line, redir, shell, expand))
-            break ;
+			break ;
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
