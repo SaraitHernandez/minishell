@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/08 15:58:15 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 01:29:48 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,9 @@ void	shell_loop(t_shell	*shell)
 			If we don't free child memory then it causes leaks 
 			As heredoc currently also uses processes then it has also to free memory in child process 
 			-> to be checked / done / tested
-		*/
-		
-		execute_ast(ast, shell);
-		free_all(1, FREE_AST, ast);
+		*/		
+		execute_ast(ast, shell, NULL);
+		free_ast(ast);
 	}
 }
 

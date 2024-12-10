@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarherna <sarherna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/08 18:33:01 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 01:53:11 by akacprzy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*ppx_command_abs_path(t_ast *ast)
 	return (NULL);
 }
 
-static char	*ppx_cmd_path(t_ast *ast, t_env *env)
+static char	*ppx_cmd_path(t_ast *ast, t_env *env, t_ast *past)
 {
 	char	**list_path;
 	char	*part_path;
@@ -37,7 +37,7 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env)
 	int		i;
 
 	if (!get_env_value("PATH", env))
-		ppx_error_path(127, ast, env);
+		ppx_error_path(127, ast, env, past);
 	list_path = ft_split(get_env_value("PATH", env), ':');
 	i = 0;
 	while (list_path[i] && ast->argv[0][0] != '\0')
@@ -57,24 +57,24 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env)
 	return (0);
 }
 
-void	ppx_cmd_exec(t_ast *ast, t_shell *shell)
+static void	ppx_cmd_exec(t_ast *ast, t_shell *shell, t_ast *past)
 {
 	char	*path;
 	int		len;
 	char	**env_arr;
 
-	path = 	ppx_command_abs_path(ast);
+	path = ppx_command_abs_path(ast);
 	if (!path)
-		path = ppx_cmd_path(ast, shell->env_list);
+		path = ppx_cmd_path(ast, shell->env_list, past);
 	if (!path)
-		ppx_error_cmd_not_found(127, ast, shell->env_list);
+		ppx_error_cmd_not_found(127, ast, shell->env_list, past);
 	env_arr = list_to_array(shell->env_list, 0);
 	len = env_array_len(env_arr);
 	if (execve(path, ast->argv, env_arr))
 	{
 		free_array(len, env_arr);
 		shell->exit_status = errno;
-		ppx_error(errno, ast, shell->env_list);
+		ppx_error(errno, ast, shell->env_list, past);
 	}
 	free_array(len, env_arr);
 	shell->exit_status = SUCCESS;
@@ -92,21 +92,21 @@ static void	setup_child_signal_handlers(struct sigaction *sa_old)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ppx_child(t_ast *ast, t_shell *shell)
+void	ppx_child(t_ast *ast, t_shell *shell, t_ast *past)
 {
 	pid_t				pid;
 	int					status;
 	struct sigaction	sa_old;
-	
+
 	setup_child_signal_handlers(&sa_old);
 	pid = fork();
 	if (pid == -1)
-		ppx_error(EXIT_FAILURE, ast, shell->env_list);
+		ppx_error(EXIT_FAILURE, ast, shell->env_list, past);
 	if (pid == 0)
 	{
 		sigaction(SIGINT, &sa_old, NULL);
 		signal(SIGINT, SIG_DFL);
-		ppx_cmd_exec(ast, shell);
+		ppx_cmd_exec(ast, shell, past);
 		free_env_list(shell->env_list);
 		free_ast(ast);
 		exit(shell->exit_status);
