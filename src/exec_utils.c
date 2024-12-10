@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 03:03:00 by akacprzy          #+#    #+#             */
-/*   Updated: 2024/12/10 01:53:11 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:27:18 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ static char	*ppx_cmd_path(t_ast *ast, t_env *env, t_ast *past)
 	return (0);
 }
 
-static void	ppx_cmd_exec(t_ast *ast, t_shell *shell, t_ast *past)
+static void	ppx_cmd_exec(t_ast *ast, t_shell *shell, t_ast *past,
+				struct sigaction *sa_old)
 {
 	char	*path;
 	int		len;
 	char	**env_arr;
 
+	sigaction(SIGINT, sa_old, NULL);
+	signal(SIGINT, SIG_DFL);
 	path = ppx_command_abs_path(ast);
 	if (!path)
 		path = ppx_cmd_path(ast, shell->env_list, past);
@@ -77,19 +80,10 @@ static void	ppx_cmd_exec(t_ast *ast, t_shell *shell, t_ast *past)
 		ppx_error(errno, ast, shell->env_list, past);
 	}
 	free_array(len, env_arr);
+	free_env_list(shell->env_list);
+	free_ast(ast);
 	shell->exit_status = SUCCESS;
-}
-
-static void	setup_child_signal_handlers(struct sigaction *sa_old)
-{
-	struct sigaction	sa_ignore;
-
-	sigaction(SIGINT, NULL, sa_old);
-	sa_ignore.sa_handler = SIG_IGN;
-	sigemptyset(&sa_ignore.sa_mask);
-	sa_ignore.sa_flags = 0;
-	sigaction(SIGINT, &sa_ignore, NULL);
-	signal(SIGQUIT, SIG_IGN);
+	exit(shell->exit_status);
 }
 
 void	ppx_child(t_ast *ast, t_shell *shell, t_ast *past)
@@ -103,14 +97,7 @@ void	ppx_child(t_ast *ast, t_shell *shell, t_ast *past)
 	if (pid == -1)
 		ppx_error(EXIT_FAILURE, ast, shell->env_list, past);
 	if (pid == 0)
-	{
-		sigaction(SIGINT, &sa_old, NULL);
-		signal(SIGINT, SIG_DFL);
-		ppx_cmd_exec(ast, shell, past);
-		free_env_list(shell->env_list);
-		free_ast(ast);
-		exit(shell->exit_status);
-	}
+		ppx_cmd_exec(ast, shell, past, &sa_old);
 	else
 	{
 		waitpid(pid, &status, 0);

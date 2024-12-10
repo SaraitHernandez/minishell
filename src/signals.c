@@ -6,7 +6,7 @@
 /*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:07:58 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/10 12:46:38 by sarherna         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:27:40 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,16 @@ void	heredoc_sigint_handler(int signo)
 	g_signal_received = SIGINT;
 	c = '\n';
 	ioctl(STDIN_FILENO, TIOCSTI, &c);
+}
+
+void	setup_child_signal_handlers(struct sigaction *sa_old)
+{
+	struct sigaction	sa_ignore;
+
+	sigaction(SIGINT, NULL, sa_old);
+	sa_ignore.sa_handler = SIG_IGN;
+	sigemptyset(&sa_ignore.sa_mask);
+	sa_ignore.sa_flags = 0;
+	sigaction(SIGINT, &sa_ignore, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
