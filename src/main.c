@@ -3,19 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akacprzy <akacprzy@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: sarherna <sarait.hernandez@novateva.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 11:58:33 by sarherna          #+#    #+#             */
-/*   Updated: 2024/12/10 01:29:48 by akacprzy         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:59:51 by sarherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static t_ast	*generate_ast(char *input, t_shell *shell)
+{
+	t_token	*tokens;
+	t_ast	*ast;
+
+	if (check_interrupt(input))
+		return (NULL);
+	tokens = lexer(input);
+	if (!tokens)
+		return (NULL);
+	expand_tokens(tokens, shell);
+	ast = parse_tokens(tokens, shell);
+	free_all(2, FREE_STRING, input, FREE_TOKEN, tokens);
+	return (ast);
+}
+
+static void	run_commands(t_ast *ast, t_shell *shell)
+{
+	if (!ast)
+		return ;
+	if (process_heredocs(ast, shell))
+	{
+		free_all(1, FREE_AST, ast);
+		return ;
+	}
+	execute_ast(ast, shell, NULL);
+	free_ast(ast);
+}
+
 void	shell_loop(t_shell	*shell)
 {
 	char	*input;
-	t_token	*tokens;
 	t_ast	*ast;
 
 	while (shell->do_exit == 0)
@@ -28,33 +56,8 @@ void	shell_loop(t_shell	*shell)
 		}
 		if (*input)
 			add_history(input);
-		if (check_interrupt(input))
-			continue ;
-		tokens = lexer(input);
-		if (!tokens)
-		{
-			free(input);
-			continue ;
-		}
-		expand_tokens(tokens, shell);
-		ast = parse_tokens(tokens, shell);
-		free_all(2, FREE_STRING, input, FREE_TOKEN, tokens);
-		if (!ast)
-			continue ;
-		if (process_heredocs(ast, shell))
-		{
-			free_all(1, FREE_AST, ast);
-			continue ;
-		}
-		//debug_print(tokens, ast);  //removing it solves norminette problem
-		/* 	We need to free unnecessary memory before executing commands
-			because each child process needs to have its memory freed
-			If we don't free child memory then it causes leaks 
-			As heredoc currently also uses processes then it has also to free memory in child process 
-			-> to be checked / done / tested
-		*/		
-		execute_ast(ast, shell, NULL);
-		free_ast(ast);
+		ast = generate_ast(input, shell);
+		run_commands(ast, shell);
 	}
 }
 
